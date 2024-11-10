@@ -24,6 +24,7 @@ public:
     int getID(){return ID;}
     int getSALAIRE(){return SALAIRE;}
     int getDUREE(){return DUREE;}
+    QSqlQueryModel* afficher();
 
     //setters mteena
 
@@ -34,9 +35,9 @@ public:
     void setDUREE(int date) { DUREE = DUREE; }
        // fonctionnalités
     bool ajouter();
-    QSqlQueryModel * afficher();
     bool supprimer(int);
     bool update(int ID, QString NOM, QString PRENOM, QString POSTE, int SALAIRE, int DUREE);
+    bool validateInputs() const;
 
 
 };

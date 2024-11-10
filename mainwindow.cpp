@@ -32,6 +32,13 @@ void MainWindow::on_pushButton_ajouter_clicked()
 
     employe e(id, nom, prenom, poste, salaire, duree);
 
+    // Validate inputs before adding
+    if (!e.validateInputs()) {
+        QMessageBox::critical(this, QObject::tr("Erreur de validation"),
+                              QObject::tr("Les données saisies ne sont pas valides.\nVeuillez vérifier les champs et réessayer."));
+        return;
+    }
+
     bool test = e.ajouter();
     if (test) {
         ui->tableView->setModel(etmp.afficher());  // Refresh the table
@@ -64,9 +71,18 @@ void MainWindow::on_pushButton_update_clicked() {
     int id = ui->lineEdit_ID->text().toInt();
     QString nom = ui->lineEdit_nom->text();
     QString prenom = ui->lineEdit_prenom->text();
-    int salaire = ui->lineEdit_salaire->text().toInt();
     QString poste = ui->lineEdit_poste->text();
+    int salaire = ui->lineEdit_salaire->text().toInt();
     int duree = ui->lineEdit_date->text().toInt(); // Assuming input is only the year
+
+    employe e(id, nom, prenom, poste, salaire, duree);
+
+    // Validate inputs before updating
+    if (!e.validateInputs()) {
+        QMessageBox::critical(this, QObject::tr("Erreur de validation"),
+                              QObject::tr("Les données saisies ne sont pas valides.\nVeuillez vérifier les champs et réessayer."));
+        return;
+    }
 
     bool test = etmp.update(id, nom, prenom, poste, salaire, duree);
     if (test) {
