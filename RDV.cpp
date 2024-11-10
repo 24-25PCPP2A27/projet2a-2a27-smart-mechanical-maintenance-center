@@ -65,3 +65,4 @@ bool rdv::update(int id, int jour, int mois, int annee, int heure, const QString
     }
     return true;
 }
+

@@ -1,10 +1,14 @@
-#include "MainWindow.h"
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <QPushButton>
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDebug>
+#include <QMessageBox>
+#include <QComboBox>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include "mainwindow.h"
+Ui::MainWindow ui;
 
 // Constructor
 MainWindow::MainWindow(QWidget *parent)
@@ -23,14 +27,19 @@ MainWindow::MainWindow(QWidget *parent)
     moisEdit = new QLineEdit;
     anneeEdit = new QLineEdit;
     heureEdit = new QLineEdit;
-    adresseEdit = new QLineEdit;
+
+    // Create ComboBox for position
+    adresseComboBox = new QComboBox;
+    adresseComboBox->addItem("Tunis");
+    adresseComboBox->addItem("Beja");
+    adresseComboBox->addItem("Mannouba");
 
     formLayout->addRow("ID:", idEdit);
     formLayout->addRow("Jour:", jourEdit);
     formLayout->addRow("Mois:", moisEdit);
     formLayout->addRow("Année:", anneeEdit);
     formLayout->addRow("Heure:", heureEdit);
-    formLayout->addRow("Adresse:", adresseEdit);
+    formLayout->addRow("Position:", adresseComboBox); // Add the combo box here
     layout->addLayout(formLayout);
 
     // Buttons for adding, updating, and deleting appointments
@@ -61,12 +70,45 @@ MainWindow::~MainWindow() {}
 
 // Method to add an appointment
 void MainWindow::addAppointment() {
+    int jour = jourEdit->text().toInt();
+    int mois = moisEdit->text().toInt();
+    int annee = anneeEdit->text().toInt();
+    int heure = heureEdit->text().toInt();
+
+    // Get the selected position from the ComboBox
+    QString position = adresseComboBox->currentText();
+
+    // Check if the ID already exists
+    QSqlQuery checkQuery;
+    checkQuery.prepare("SELECT COUNT(*) FROM rdv WHERE IDR = :idr");
+    checkQuery.bindValue(":idr", idEdit->text().toInt());
+    if (checkQuery.exec() && checkQuery.next() && checkQuery.value(0).toInt() > 0) {
+        QMessageBox::warning(this, "Erreur", "L'ID existe déjà. Veuillez saisir un ID unique.");
+        return;
+    }
+
+    // Input validation for date and time fields
+    if (jour < 1 || jour > 31 || (mois == 2 && jour > (annee % 4 == 0 && (annee % 100 != 0 || annee % 400 == 0) ? 29 : 28)) || ((mois == 4 || mois == 6 || mois == 9 || mois == 11) && jour > 30)) {
+        QMessageBox::warning(this, "Erreur", "Le jour saisi est invalide pour le mois et l'année donnés.");
+        return;
+    }
+    if (mois < 1 || mois > 12) {
+        QMessageBox::warning(this, "Erreur", "Le mois doit être compris entre 1 et 12.");
+        return;
+    }
+
+    if (heure < 0 || heure > 23) {
+        QMessageBox::warning(this, "Erreur", "L'heure doit être comprise entre 0 et 23.");
+        return;
+    }
+
+    // Create the appointment object and add it
     rdv appointment(idEdit->text().toInt(),
-                    jourEdit->text().toInt(),
-                    moisEdit->text().toInt(),
-                    anneeEdit->text().toInt(),
-                    heureEdit->text().toInt(),
-                    adresseEdit->text());
+                    jour,
+                    mois,
+                    annee,
+                    heure,
+                    position); // Pass the selected position to the appointment
 
     if (appointment.ajouter()) {
         QMessageBox::information(this, "Succès", "Rendez-vous ajouté avec succès.");
@@ -83,7 +125,7 @@ void MainWindow::updateAppointment() {
                     moisEdit->text().toInt(),
                     anneeEdit->text().toInt(),
                     heureEdit->text().toInt(),
-                    adresseEdit->text());
+                    adresseComboBox->currentText()); // Get the selected position from the ComboBox
 
     if (appointment.update(appointment.getIDR(),
                            appointment.getJOUR(),

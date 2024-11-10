@@ -5,8 +5,9 @@
 #include <QLineEdit>
 #include <QTableWidget>
 #include <QMessageBox>
+#include <QComboBox>
+#include "ui_mainwindow.h"
 #include "RDV.h"
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
