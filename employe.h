@@ -4,6 +4,8 @@
 #include<QSqlQuery>
 #include<QSqlQueryModel>
 #include <QDate>
+#include <QMap>
+#include <QVariant>
 
 
 class employe
@@ -25,14 +27,17 @@ public:
     int getSALAIRE(){return SALAIRE;}
     int getDUREE(){return DUREE;}
     QSqlQueryModel* afficher();
-
+    QSqlQueryModel* sortBySalaire();
+    QMap<QString, QVariant> getDureeStatistics();
+    bool exportToPDF(const QString &filePath);  // Declare the export function
+    QSqlQueryModel* search(const QString &searchQuery);
     //setters mteena
 
     void setNOM(QString n){NOM=n;}
     void setPRENOM(QString pre){PRENOM=pre;}
     void setPOSTE(QString po){POSTE=po;}
     void setID(int ID ){this->ID=ID;}
-    void setDUREE(int date) { DUREE = DUREE; }
+    void setDUREE(int date) { DUREE =DUREE; }
        // fonctionnalités
     bool ajouter();
     bool supprimer(int);

@@ -269,6 +269,81 @@
      <string>AFFICHER</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_sort">
+    <property name="geometry">
+     <rect>
+      <x>1690</x>
+      <y>790</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tri</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_statistics">
+    <property name="geometry">
+     <rect>
+      <x>1690</x>
+      <y>840</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>stat</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_export_pdf">
+    <property name="geometry">
+     <rect>
+      <x>1690</x>
+      <y>890</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PDF</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_search">
+    <property name="geometry">
+     <rect>
+      <x>1710</x>
+      <y>940</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_insert_image">
+    <property name="geometry">
+     <rect>
+      <x>1520</x>
+      <y>790</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Image</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>1650</x>
+      <y>940</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Recherche</string>
+    </property>
+   </widget>
    <zorder>label_7</zorder>
    <zorder>lineEdit_ID</zorder>
    <zorder>lineEdit_nom</zorder>
@@ -287,6 +362,12 @@
    <zorder>label_5</zorder>
    <zorder>label_6</zorder>
    <zorder>pushButton_refresh</zorder>
+   <zorder>pushButton_sort</zorder>
+   <zorder>pushButton_statistics</zorder>
+   <zorder>pushButton_export_pdf</zorder>
+   <zorder>lineEdit_search</zorder>
+   <zorder>pushButton_insert_image</zorder>
+   <zorder>label_8</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

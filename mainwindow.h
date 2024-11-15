@@ -2,27 +2,41 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlQueryModel>
+#include <QMessageBox>
+#include <QtCharts/QChartView>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QChart>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
 #include "employe.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 private slots:
     void on_pushButton_ajouter_clicked();
     void on_pushButton_supprimer_clicked();
     void on_pushButton_update_clicked();
-    void refreshData();  // Declaration for the refresh slot
+    void refreshData();
+    void sortDataBySalaire();
+    void displayDureeStatistics();
+    void exportDataToPDF();
+    void searchEmployees(const QString &query);
 
 private:
     Ui::MainWindow *ui;
-    employe etmp;
+    employe etmp;  // Object of the 'employe' class for employee operations
 };
+
 #endif // MAINWINDOW_H
