@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>login</class>
+ <widget class="QWidget" name="login">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1112</width>
+    <height>780</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>-560</x>
+     <y>-150</y>
+     <width>1671</width>
+     <height>901</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>F:/Qt projet/Employee/1.jpg</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_login">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>600</y>
+     <width>681</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">PushButton {
+	font: 16pt &quot;MS Shell Dlg 2&quot;;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: gray;
+    color: black;
+    outline: none; 
+}</string>
+   </property>
+   <property name="text">
+    <string>Login</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_username">
+   <property name="geometry">
+    <rect>
+     <x>172</x>
+     <y>270</y>
+     <width>681</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    border: 2px solid #3498db;  /* Blue border */
+    border-radius: 15px;         /* Rounded corners */
+    padding: 5px 10px;           /* Padding inside the input field */
+    background-color: white;   /* Light gray background */
+    font-size: 14px;              /* Font size */
+    color: #2c3e50;               /* Dark text color */
+}
+
+QLineEdit:focus {
+    border: 2px solid #1abc9c;   /* Green border on focus */
+    background-color: #eaf6f1;    /* Light green background when focused */
+    color: #16a085;               /* Dark green text color when focused */
+}
+</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_password">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>390</y>
+     <width>681</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    border: 2px solid #3498db;  /* Blue border */
+    border-radius: 15px;         /* Rounded corners */
+    padding: 5px 10px;           /* Padding inside the input field */
+    background-color: #f4f4f4;   /* Light gray background */
+    font-size: 14px;              /* Font size */
+    color: #2c3e50;               /* Dark text color */
+}
+
+QLineEdit:focus {
+    border: 2px solid #1abc9c;   /* Green border on focus */
+    background-color: #eaf6f1;    /* Light green background when focused */
+    color: #16a085;               /* Dark green text color when focused */
+}
+</string>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_forgotPassword">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>512</y>
+     <width>211</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	font: 16pt &quot;MS Shell Dlg 2&quot;;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 0, 0);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+   </property>
+   <property name="text">
+    <string>Mot de Passe Oublié</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

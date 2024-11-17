@@ -1,5 +1,4 @@
-QT       += sql printsupport charts
-
+QT       += sql printsupport charts network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -16,19 +15,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    EmployeMain.cpp \
     connection.cpp \
     employe.cpp \
+    forgotpassworddialog.cpp \
+    login.cpp \
     main.cpp \
-    mainwindow.cpp
+    qrcodedialog.cpp \
+    qrcodegen.cpp \
+    sendsmsdialog.cpp \
+    smshandler.cpp
 
 HEADERS += \
+    EmployeMain.h \
     connection.h \
     employe.h \
-    mainwindow.h
+    forgotpassworddialog.h \
+    login.h \
+    qrcodedialog.h \
+    qrcodegen.h \
+    sendsmsdialog.h \
+    smshandler.h
 
 FORMS += \
-    mainwindow.ui
-
+    EmployeMain.ui \
+    forgotpassworddialog.ui \
+    login.ui \
+    qrcodedialog.ui \
+    sendsmsdialog.ui
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
