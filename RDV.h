@@ -1,7 +1,8 @@
-#ifndef RDV_H
+    #ifndef RDV_H
 #define RDV_H
 
 #include <QString>
+ #include <QSqlQueryModel>
 
 class rdv {
 public:
@@ -21,7 +22,7 @@ public:
     bool supprimer(int id);
     bool update(int id, int jour, int mois, int annee, int heure, const QString &adresse);
 
-private:
+  private:
     int IDR;        // Record ID
     int JOUR;      // Day
     int MOIS;      // Month
