@@ -5,42 +5,43 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 
-class Service
-{
+class Service {
 private:
-    int IDS;
-    QString TYPE;
-    QString DUREE;
-    QString EQUIPMENT;
-    QString ETATS;
-    QString COUT;
+    int id;
+    double cout;
+    QString type;
+    double duree;
+    QString etats; // Possible values: "annulé", "en cours", "terminée"
 
 public:
-    // Constructeurs
-    Service() {}
-    Service(int ids, QString type, QString duree, QString equipment, QString etats, QString cout);
-
+    // Constructors
+    Service();
+    Service(int id, double cout, QString type, double duree, QString etats);
+    QSqlQueryModel* obtenirStatistiquesService();
     // Getters
-    int getId() const { return IDS; }
-    QString getType() const { return TYPE; }
-    QString getDuree() const { return DUREE; }
-    QString getEquipment() const { return EQUIPMENT; }
-    QString getEtats() const { return ETATS; }
-    QString getCout() const { return COUT; }
+    int getId() const;
+    double getCout() const;
+    QString getType() const;
+    double getDuree() const;
+    QString getEtats() const;
 
     // Setters
-    void setId(int ids) { IDS = ids; }
-    void setType(const QString &type) { TYPE = type; }
-    void setDuree(const QString &duree) { DUREE = duree; }
-    void setEquipment(const QString &equipment) { EQUIPMENT = equipment; }
-    void setEtats(const QString &etats) { ETATS = etats; }
-    void setCout(const QString &cout) { COUT = cout; }
+    void setId(int id);
+    void setCout(double cout);
+    void setType(QString type);
+    void setDuree(double duree);
+    void setEtats(QString etats);
 
-    // Méthodes de base de données
-    bool Ajouter();               // Ajouter un service dans la base de données
-    QSqlQueryModel* afficher();   // Afficher tous les services
-    bool supprimer(int ids);       // Supprimer un service par ID
-    bool update(int ids, QString type, QString duree, QString equipment, QString etats, QString cout); // Mettre à jour un service
+    // CRUD Operations
+    bool ajouter(int idserv, const QString &type, const QString &duree, const QString &etats, float cout);
+    QSqlQueryModel* afficher();
+    bool supprimer(int id);
+    bool modifier(int id);
+
+    // Functionalities
+    QSqlQueryModel* rechercher(const QString& keyword);
+    QSqlQueryModel* trier(const QString& critere, const QString& ordre);
+    void genererPDF();
 };
 
 #endif // SERVICE_H

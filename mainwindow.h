@@ -4,12 +4,11 @@
 #include <QMainWindow>
 #include "service.h"
 
-namespace Ui {
-class MainWindow;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {  // Hérite correctement de QMainWindow
     Q_OBJECT
 
 public:
@@ -17,14 +16,20 @@ public:
     ~MainWindow();
 
 private slots:
-   // void on_addButton_clicked();
-    void on_deleteButton_clicked();
-    void on_updateButton_clicked();
-    void on_showButton_clicked();
+    void on_statistique_clicked();
     void on_pushButton_clicked();
+    void on_conversionenpdf_clicked();
+    void on_afficher_clicked();
+    void on_trier_clicked();
+    void on_rechercher_clicked();
+    void on_updateButton_clicked();
+    void on_deleteButton_clicked();
+    void onSendMessage();
 
 private:
     Ui::MainWindow *ui;
+    Service tmpService;
+    Service serviceInstance;// Objet temporaire pour gérer les services
 };
 
 #endif // MAINWINDOW_H
