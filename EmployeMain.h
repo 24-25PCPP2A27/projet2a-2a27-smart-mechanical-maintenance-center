@@ -13,6 +13,7 @@
 #include "employe.h"
 #include "qrcodedialog.h"
 #include <QSystemTrayIcon>
+#include "login.h"
 
 
 namespace Ui {
@@ -40,12 +41,15 @@ private slots:
     void on_pushButton_openQRCodeDialog_clicked();
     void toggleTheme();
     void openSendSmsDialog();
+    void openLogViewer();
+    void on_pushButton_loginwindow_clicked();
 
 private:
     Ui::MainWindow *ui;
     employe etmp;  // Object of the 'employe' class for employee operations
     bool isDarkMode = false;
     QSystemTrayIcon *trayIcon;
+    Login *loginWindow;
 
 
 };

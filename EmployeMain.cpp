@@ -15,10 +15,12 @@
 #include <QSqlError>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
+#include "logviewer.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+
 {
     ui->setupUi(this);
     // Initialize tray icon
@@ -41,6 +43,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_export_pdf, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
     connect(ui->pushButton_toggleTheme, &QPushButton::clicked, this, &MainWindow::toggleTheme);
     connect(ui->pushButton_sendSms, &QPushButton::clicked, this, &MainWindow::openSendSmsDialog);
+    connect(ui->pushButton_showLogs, &QPushButton::clicked, this, &MainWindow::openLogViewer);
+    connect(ui->pushButton_loginwindow, &QPushButton::clicked, this, &MainWindow::on_pushButton_loginwindow_clicked);
+
 
 
 }
@@ -65,6 +70,7 @@ void MainWindow::on_pushButton_ajouter_clicked()
     if (!e.validateInputs()) {
         QMessageBox::critical(this, QObject::tr("Erreur de validation"),
                               QObject::tr("Les données saisies ne sont pas valides."));
+        LogViewer::writeLog("Validation failed while adding an employee."); // Log validation failure
         return;
     }
 
@@ -72,33 +78,32 @@ void MainWindow::on_pushButton_ajouter_clicked()
     if (test) {
         ui->tableView->setModel(e.afficher());
         QMessageBox::information(this, QObject::tr("Succès"), QObject::tr("Ajout effectué."));
+        trayIcon->showMessage("Succès", "Employé ajouté avec succès.", QSystemTrayIcon::Information, 3000);
 
-        trayIcon->showMessage("Succès",
-                              "Employé ajouté avec succès.",
-                              QSystemTrayIcon::Information,
-                              3000);
+        LogViewer::writeLog(QString("Employee added: ID=%1, Name=%2 %3").arg(id).arg(nom).arg(prenom)); // Log success
     } else {
         QMessageBox::critical(this, QObject::tr("Erreur"), QObject::tr("Échec de l'ajout."));
+        LogViewer::writeLog(QString("Failed to add employee: ID=%1").arg(id)); // Log failure
     }
 }
 
 void MainWindow::on_pushButton_supprimer_clicked()
 {
     int id = ui->lineEdit_ID->text().toInt();
-    bool test = etmp.supprimer(id);
 
+    bool test = etmp.supprimer(id);
     if (test) {
         ui->tableView->setModel(etmp.afficher());
         QMessageBox::information(this, QObject::tr("Succès"), QObject::tr("Suppression effectuée."));
+        trayIcon->showMessage("Succès", "Employé supprimé avec succès.", QSystemTrayIcon::Information, 3000);
 
-        trayIcon->showMessage("Succès",
-                              "Employé supprimé avec succès.",
-                              QSystemTrayIcon::Information,
-                              3000);
+        LogViewer::writeLog(QString("Employee deleted successfully: ID=%1").arg(id)); // Log success
     } else {
         QMessageBox::critical(this, QObject::tr("Erreur"), QObject::tr("Échec de la suppression."));
+        LogViewer::writeLog(QString("Failed to delete employee: ID=%1").arg(id)); // Log failure
     }
 }
+
 void MainWindow::on_pushButton_update_clicked()
 {
     int id = ui->lineEdit_ID->text().toInt();
@@ -114,6 +119,7 @@ void MainWindow::on_pushButton_update_clicked()
     if (!e.validateInputs()) {
         QMessageBox::critical(this, QObject::tr("Erreur de validation"),
                               QObject::tr("Les données saisies ne sont pas valides."));
+        LogViewer::writeLog(QString("Validation failed for employee update: ID=%1").arg(id)); // Log validation failure
         return;
     }
 
@@ -122,15 +128,16 @@ void MainWindow::on_pushButton_update_clicked()
     if (test) {
         ui->tableView->setModel(etmp.afficher());
         QMessageBox::information(this, QObject::tr("Succès"), QObject::tr("Mise à jour effectuée."));
+        trayIcon->showMessage("Succès", "Employé mis à jour avec succès.", QSystemTrayIcon::Information, 3000);
 
-        trayIcon->showMessage("Succès",
-                              "Employé mis à jour avec succès.",
-                              QSystemTrayIcon::Information,
-                              3000);
+        LogViewer::writeLog(QString("Employee updated successfully: ID=%1, Name=%2 %3, Poste=%4, Salaire=%5")
+                            .arg(id).arg(nom).arg(prenom).arg(poste).arg(salaire)); // Log success
     } else {
         QMessageBox::critical(this, QObject::tr("Erreur"), QObject::tr("Échec de la mise à jour."));
+        LogViewer::writeLog(QString("Failed to update employee: ID=%1").arg(id)); // Log failure
     }
 }
+
 // Refresh data method
 void MainWindow::refreshData()
 {
@@ -287,3 +294,11 @@ QString MainWindow::getPhoneNumberForEmployee(const QString &id)
     return "";  // Return empty string if phone number not found
 }
 
+void MainWindow::openLogViewer() {
+    LogViewer *logViewer = new LogViewer(this);
+    logViewer->exec();  // Show as a modal dialog
+}
+void MainWindow::on_pushButton_loginwindow_clicked()
+{
+    loginWindow->show();  // Just show the login window
+}

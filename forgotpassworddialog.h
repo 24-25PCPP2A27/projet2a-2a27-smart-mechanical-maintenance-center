@@ -2,9 +2,6 @@
 #define FORGOTPASSWORDDIALOG_H
 
 #include <QDialog>
-#include <QSqlQuery>
-#include <QMessageBox>
-#include "smshandler.h"  // Include SmsHandler
 
 namespace Ui {
 class ForgotPasswordDialog;
@@ -19,15 +16,15 @@ public:
     ~ForgotPasswordDialog();
 
 private slots:
-    void on_pushButton_resetPassword_clicked();
+    void on_pushButton_verify_clicked();        // Slot for verify button
+    void on_pushButton_resetPassword_clicked(); // Slot for reset password button
 
 private:
     Ui::ForgotPasswordDialog *ui;
 
-    bool verifyForgotPassword(const QString &id, const QString &salary);  // Verify ID and salary
-    void resetPassword(const QString &id, const QString &newPassword);  // Reset the password
-    bool sendSmsNotification(const QString &phoneNumber, const QString &message);  // Send SMS
-    QString getPhoneNumberForEmployee(const QString &id);  // Get phone number for employee
+    // Helper methods
+    bool verifyForgotPassword(const QString &id, const QString &salary); // Verify ID and salary
+    void resetPassword(const QString &id, const QString &newPassword);   // Reset password
 };
 
 #endif // FORGOTPASSWORDDIALOG_H

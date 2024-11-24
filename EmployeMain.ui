@@ -467,7 +467,7 @@ QPushButton:hover {
 }</string>
     </property>
     <property name="text">
-     <string>Services</string>
+     <string>RDV</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_Vehicules">
@@ -530,7 +530,7 @@ QPushButton:hover {
      <string>Services</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Login">
+   <widget class="QPushButton" name="pushButton_loginwindow">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -639,6 +639,19 @@ QPushButton:hover {
     </property>
     <property name="text">
      <string>SMS</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_showLogs">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>1000</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Historique</string>
     </property>
    </widget>
   </widget>

@@ -35,22 +35,40 @@
      <x>170</x>
      <y>600</y>
      <width>681</width>
-     <height>91</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">PushButton {
-	font: 16pt &quot;MS Shell Dlg 2&quot;;
-    background-color: white;
-    color: rgb(0, 0, 0);
-    padding: 10px; 
-    transition: background-color 0.3s, color 0.3s; 
+    <string notr="true">/* Style for the entire QPushButton */
+QPushButton {
+    background-color: White;  /* Tomato red background */
+    border: 2px solid #FF4500;  /* Slightly darker red border */
+    border-radius: 15px;        /* Rounded corners */
+    color: black;               /* White text color */
+    font-size: 16px;            /* Font size */
+    padding: 10px 20px;         /* Padding around text */
+    min-width: 150px;           /* Minimum width of button */          /* Maximum width of button */
+    text-align: center;         /* Center the text */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
 }
+
+/* Hover effect */
 QPushButton:hover {
-    background-color: gray;
-    color: black;
-    outline: none; 
-}</string>
+    background-color: #FF4500;  /* Darker red when hovered */
+    transform: scale(1.05);      /* Slightly grow the button */
+}
+
+/* Pressed effect */
+QPushButton:pressed {
+    background-color: #FF0000;  /* Bright red when pressed */
+    transform: scale(0.98);      /* Slightly shrink the button */
+}
+
+/* Focus effect */
+QPushButton:focus {
+    outline: none;  /* Remove the focus outline */
+}
+</string>
    </property>
    <property name="text">
     <string>Login</string>
@@ -59,26 +77,34 @@ QPushButton:hover {
   <widget class="QLineEdit" name="lineEdit_username">
    <property name="geometry">
     <rect>
-     <x>172</x>
+     <x>170</x>
      <y>270</y>
      <width>681</width>
-     <height>91</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLineEdit {
-    border: 2px solid #3498db;  /* Blue border */
-    border-radius: 15px;         /* Rounded corners */
-    padding: 5px 10px;           /* Padding inside the input field */
-    background-color: white;   /* Light gray background */
-    font-size: 14px;              /* Font size */
-    color: #2c3e50;               /* Dark text color */
+    <string notr="true">/* Style for the QLineEdit */
+QLineEdit {
+    background-color: #FFFFFF;  /* White background */
+    border: 2px solid #FF4500;  /* Orange border */
+    border-radius: 12px;        /* Rounded corners */
+    padding: 10px;              /* Padding inside the text field */
+    font-size: 16px;            /* Font size */
+    color: #333333;             /* Text color */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
 }
 
+/* Focus effect for QLineEdit */
 QLineEdit:focus {
-    border: 2px solid #1abc9c;   /* Green border on focus */
-    background-color: #eaf6f1;    /* Light green background when focused */
-    color: #16a085;               /* Dark green text color when focused */
+    border: 2px solid #FF6347;  /* Tomato red border when focused */
+    background-color: #FFF8F0;  /* Light background on focus */
+}
+
+/* Placeholder text style */
+QLineEdit::placeholder {
+    color: #B0B0B0;  /* Light grey color for placeholder */
+    font-style: italic;  /* Italicized placeholder text */
 }
 </string>
    </property>
@@ -89,23 +115,31 @@ QLineEdit:focus {
      <x>170</x>
      <y>390</y>
      <width>681</width>
-     <height>91</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLineEdit {
-    border: 2px solid #3498db;  /* Blue border */
-    border-radius: 15px;         /* Rounded corners */
-    padding: 5px 10px;           /* Padding inside the input field */
-    background-color: #f4f4f4;   /* Light gray background */
-    font-size: 14px;              /* Font size */
-    color: #2c3e50;               /* Dark text color */
+    <string notr="true">/* Style for the QLineEdit */
+QLineEdit {
+    background-color: #FFFFFF;  /* White background */
+    border: 2px solid #FF4500;  /* Orange border */
+    border-radius: 12px;        /* Rounded corners */
+    padding: 10px;              /* Padding inside the text field */
+    font-size: 16px;            /* Font size */
+    color: #333333;             /* Text color */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
 }
 
+/* Focus effect for QLineEdit */
 QLineEdit:focus {
-    border: 2px solid #1abc9c;   /* Green border on focus */
-    background-color: #eaf6f1;    /* Light green background when focused */
-    color: #16a085;               /* Dark green text color when focused */
+    border: 2px solid #FF6347;  /* Tomato red border when focused */
+    background-color: #FFF8F0;  /* Light background on focus */
+}
+
+/* Placeholder text style */
+QLineEdit::placeholder {
+    color: #B0B0B0;  /* Light grey color for placeholder */
+    font-style: italic;  /* Italicized placeholder text */
 }
 </string>
    </property>
@@ -119,25 +153,41 @@ QLineEdit:focus {
      <x>650</x>
      <y>512</y>
      <width>211</width>
-     <height>41</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton {
-	font: 16pt &quot;MS Shell Dlg 2&quot;;
-    background-color: white;
-    color: rgb(0, 0, 0);
-    border: 2px solid rgb(255, 0, 0); 
-    border-radius: 20px; 
-    padding: 10px; 
-    transition: background-color 0.3s, color 0.3s; 
+    <string notr="true">/* Style for the entire QPushButton */
+QPushButton {
+    background-color: White;  /* Tomato red background */
+    border: 2px solid #FF4500;  /* Slightly darker red border */
+    border-radius: 15px;        /* Rounded corners */
+    color: black;               /* White text color */
+    font-size: 16px;            /* Font size */
+    padding: 10px 20px;         /* Padding around text */
+    min-width: 150px;           /* Minimum width of button */
+    max-width: 390px;           /* Maximum width of button */
+    text-align: center;         /* Center the text */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
 }
+
+/* Hover effect */
 QPushButton:hover {
-    background-color: rgb(255, 0, 0);
-    color: black;
-    border: 4px solid rgb(255, 255, 255); 
-    outline: none; 
-}</string>
+    background-color: #FF4500;  /* Darker red when hovered */
+    transform: scale(1.05);      /* Slightly grow the button */
+}
+
+/* Pressed effect */
+QPushButton:pressed {
+    background-color: #FF0000;  /* Bright red when pressed */
+    transform: scale(0.98);      /* Slightly shrink the button */
+}
+
+/* Focus effect */
+QPushButton:focus {
+    outline: none;  /* Remove the focus outline */
+}
+</string>
    </property>
    <property name="text">
     <string>Mot de Passe Oublié</string>

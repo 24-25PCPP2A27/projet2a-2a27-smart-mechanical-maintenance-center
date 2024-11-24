@@ -21,6 +21,7 @@ private slots:
 
 private:
     Ui::login *ui;
+    void writeLog(const QString &message, const QString &category = "general");
 };
 
 #endif // LOGIN_H

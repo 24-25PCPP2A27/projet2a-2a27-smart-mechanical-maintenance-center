@@ -20,6 +20,7 @@ SOURCES += \
     employe.cpp \
     forgotpassworddialog.cpp \
     login.cpp \
+    logviewer.cpp \
     main.cpp \
     qrcodedialog.cpp \
     qrcodegen.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     employe.h \
     forgotpassworddialog.h \
     login.h \
+    logviewer.h \
     qrcodedialog.h \
     qrcodegen.h \
     sendsmsdialog.h \

@@ -10,6 +10,22 @@ ForgotPasswordDialog::ForgotPasswordDialog(QWidget *parent) :
     ui(new Ui::ForgotPasswordDialog)
 {
     ui->setupUi(this);
+
+    // Initially hide password fields and their labels
+    ui->lineEdit_newPassword->setVisible(false);
+    ui->lineEdit_retypePassword->setVisible(false);
+    ui->label_newPassword->setVisible(false);
+    ui->label_retypePassword->setVisible(false);
+    ui->label_pass->setVisible(false);
+    ui->pushButton_resetPassword->setEnabled(false);
+    ui->pushButton_verify->setEnabled(true);
+
+    // Connect the verify button
+    connect(ui->pushButton_verify, &QPushButton::clicked, this, &ForgotPasswordDialog::on_pushButton_verify_clicked);
+
+
+    // Connect the reset password button
+    connect(ui->pushButton_resetPassword, SIGNAL(clicked()), this, SLOT(on_pushButton_resetPassword_clicked()));
 }
 
 ForgotPasswordDialog::~ForgotPasswordDialog()
@@ -17,35 +33,71 @@ ForgotPasswordDialog::~ForgotPasswordDialog()
     delete ui;
 }
 
-void ForgotPasswordDialog::on_pushButton_resetPassword_clicked()
+void ForgotPasswordDialog::on_pushButton_verify_clicked()
 {
-    QString id = ui->lineEdit_id->text();  // Get ID from input
-    QString salary = ui->lineEdit_salary->text();  // Get salary from input
-    QString newPassword = ui->lineEdit_newPassword->text();  // Get new password
+    QString id = ui->lineEdit_id->text();        // Get ID
+    QString salary = ui->lineEdit_salary->text(); // Get Salary
 
-    if (id.isEmpty() || salary.isEmpty() || newPassword.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Please fill all fields.");
+    if (id.isEmpty() || salary.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please fill both ID and Salary fields.");
         return;
     }
 
-    // Check if ID and salary are valid in the database
+    // Verify ID and salary in the database
     if (verifyForgotPassword(id, salary)) {
-        if (newPassword.length() < 6) {
-            QMessageBox::warning(this, "Error", "Password must be at least 6 characters long.");
-            return;
-        }
+        QMessageBox::information(this, "Verification", "ID and Salary verified successfully!");
 
-        // Reset password
-        resetPassword(id, newPassword);
-        QMessageBox::information(this, "Success", "Password reset successfully.");
+        // Make password fields and labels visible
+        ui->lineEdit_newPassword->setVisible(true);
+        ui->lineEdit_retypePassword->setVisible(true);
+        ui->label_newPassword->setVisible(true);
+        ui->label_retypePassword->setVisible(true);
+        ui->label_pass->setVisible(true);
+        ui->pushButton_resetPassword->setEnabled(true);
 
-        accept();  // Close the dialog
+        // Disable ID and salary fields after successful verification
+        ui->lineEdit_id->setEnabled(false);
+        ui->lineEdit_salary->setEnabled(false);
+
+        // Hide and disable the verify button
+        ui->pushButton_verify->setVisible(false);  // Hide the button
+        ui->pushButton_verify->setEnabled(false); // Disable the button to prevent clicks
+        ui->label_verify->setVisible(false);       // Optionally, hide the label as well
     } else {
-        QMessageBox::warning(this, "Error", "Invalid ID or salary.");
+        QMessageBox::warning(this, "Error", "Invalid ID or Salary. Please try again.");
     }
 }
 
-// Verify the ID and salary in the database
+
+void ForgotPasswordDialog::on_pushButton_resetPassword_clicked()
+{
+    QString newPassword = ui->lineEdit_newPassword->text();       // Get New Password
+    QString retypePassword = ui->lineEdit_retypePassword->text(); // Get Retype Password
+    QString id = ui->lineEdit_id->text();                         // ID remains available after verification
+
+    // Validate passwords
+    if (newPassword.isEmpty() || retypePassword.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please fill all password fields.");
+        return;
+    }
+
+    if (newPassword != retypePassword) {
+        QMessageBox::warning(this, "Error", "Passwords do not match. Please try again.");
+        return;
+    }
+
+    if (newPassword.length() < 6) {
+        QMessageBox::warning(this, "Error", "Password must be at least 6 characters long.");
+        return;
+    }
+
+    // Reset password in the database
+    resetPassword(id, newPassword);
+    QMessageBox::information(this, "Success", "Password reset successfully!");
+
+    accept();  // Close dialog
+}
+
 bool ForgotPasswordDialog::verifyForgotPassword(const QString &id, const QString &salary)
 {
     QSqlQuery query;
@@ -61,7 +113,6 @@ bool ForgotPasswordDialog::verifyForgotPassword(const QString &id, const QString
     return query.next();  // Return true if the ID and salary match a record
 }
 
-// Reset the password in the database
 void ForgotPasswordDialog::resetPassword(const QString &id, const QString &newPassword)
 {
     QSqlQuery query;
