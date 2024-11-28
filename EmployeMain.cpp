@@ -1,7 +1,6 @@
 #include "EmployeMain.h"
 #include "ui_EmployeMain.h"
 #include "employe.h"
-#include "sendsmsdialog.h"
 #include <QMessageBox>
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
@@ -16,10 +15,12 @@
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include "logviewer.h"
+#include <QTimer>
+#include <QtQuickWidgets/QQuickWidget>
 
-MainWindow::MainWindow(QWidget *parent)
+EmployeMain::EmployeMain(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::EmployeMain)
 
 {
     ui->setupUi(this);
@@ -31,31 +32,33 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add context menu to tray icon
     QMenu *trayMenu = new QMenu(this);
-    trayMenu->addAction("Ouvrir l'application", this, &MainWindow::show);
-    trayMenu->addAction("Quitter", this, &MainWindow::close);
+    trayMenu->addAction("Ouvrir l'application", this, &EmployeMain::show);
+    trayMenu->addAction("Quitter", this, &EmployeMain::close);
     trayIcon->setContextMenu(trayMenu);
     refreshData();
     // Connect signals to slots
-    connect(ui->lineEdit_search, &QLineEdit::textChanged, this, &MainWindow::searchEmployees);
-    connect(ui->pushButton_refresh, &QPushButton::clicked, this, &MainWindow::refreshData);
-    connect(ui->pushButton_sort, &QPushButton::clicked, this, &MainWindow::sortDataBySalaire);
-    connect(ui->pushButton_statistics, &QPushButton::clicked, this, &MainWindow::displayDureeStatistics);
-    connect(ui->pushButton_export_pdf, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
-    connect(ui->pushButton_toggleTheme, &QPushButton::clicked, this, &MainWindow::toggleTheme);
-    connect(ui->pushButton_sendSms, &QPushButton::clicked, this, &MainWindow::openSendSmsDialog);
-    connect(ui->pushButton_showLogs, &QPushButton::clicked, this, &MainWindow::openLogViewer);
-    connect(ui->pushButton_loginwindow, &QPushButton::clicked, this, &MainWindow::on_pushButton_loginwindow_clicked);
+    connect(ui->lineEdit_search, &QLineEdit::textChanged, this, &EmployeMain::searchEmployees);
+    connect(ui->pushButton_refresh, &QPushButton::clicked, this, &EmployeMain::refreshData);
+    connect(ui->pushButton_sort, &QPushButton::clicked, this, &EmployeMain::sortDataBySalaire);
+    connect(ui->pushButton_export_pdf, &QPushButton::clicked, this, &EmployeMain::exportDataToPDF);
+    connect(ui->pushButton_toggleTheme, &QPushButton::clicked, this, &EmployeMain::toggleTheme);
+    connect(ui->pushButton_showLogs, &QPushButton::clicked, this, &EmployeMain::openLogViewer);
+    refreshTimer = new QTimer(this);
+    connect(refreshTimer, &QTimer::timeout, this, &EmployeMain::refreshDureeStatistics);
+    refreshTimer->start(10000); // Set interval to 10000ms (10 seconds)
+        // Initially, call the function to display the chart
+        refreshDureeStatistics();
 
 
 
 }
 
-MainWindow::~MainWindow()
+EmployeMain::~EmployeMain()
 {
     delete ui;
 }
 
-void MainWindow::on_pushButton_ajouter_clicked()
+void EmployeMain::on_pushButton_ajouter_clicked()
 {
     int id = ui->lineEdit_ID->text().toInt();
     QString nom = ui->lineEdit_nom->text();
@@ -87,7 +90,7 @@ void MainWindow::on_pushButton_ajouter_clicked()
     }
 }
 
-void MainWindow::on_pushButton_supprimer_clicked()
+void EmployeMain::on_pushButton_supprimer_clicked()
 {
     int id = ui->lineEdit_ID->text().toInt();
 
@@ -104,7 +107,7 @@ void MainWindow::on_pushButton_supprimer_clicked()
     }
 }
 
-void MainWindow::on_pushButton_update_clicked()
+void EmployeMain::on_pushButton_update_clicked()
 {
     int id = ui->lineEdit_ID->text().toInt();
     QString nom = ui->lineEdit_nom->text();
@@ -139,7 +142,7 @@ void MainWindow::on_pushButton_update_clicked()
 }
 
 // Refresh data method
-void MainWindow::refreshData()
+void EmployeMain::refreshData()
 {
     ui->tableView->setModel(etmp.afficher());
     ui->lineEdit_ID->clear();
@@ -152,7 +155,7 @@ void MainWindow::refreshData()
 }
 
 // Slot to sort data by SALAIRE
-void MainWindow::sortDataBySalaire()
+void EmployeMain::sortDataBySalaire()
 {
     ui->tableView->setModel(etmp.sortBySalaire());
     trayIcon->showMessage("Information",
@@ -162,7 +165,7 @@ void MainWindow::sortDataBySalaire()
 }
 // Slot to display statistics for DUREE
 
-void MainWindow::displayDureeStatistics() {
+void EmployeMain::refreshDureeStatistics() {
     // Query to get all "duree" values from the EMPLOYEE table
     QSqlQuery query;
     query.prepare("SELECT duree FROM EMPLOYEE");
@@ -212,16 +215,26 @@ void MainWindow::displayDureeStatistics() {
     chart->addSeries(series);
     chart->setTitle("Statistiques de la durée (Par Employé)");
 
-    // Display the chart in a chart view
+    // Create the chart view and embed it in the main window
     QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
-    chartView->setMinimumSize(400, 300);
-    chartView->setWindowTitle("Durée Statistiques");
-    chartView->show();
+    chartView->setMinimumSize(400, 300); // Adjust size as necessary
+
+    // Add or replace the chart view in the layout
+    // Assuming you have a layout for the chart (layoutChartView)
+    if (ui->layoutChartView->count() > 0) {
+        QLayoutItem *item = ui->layoutChartView->itemAt(0);
+        QWidget *widget = item->widget();
+        if (widget) {
+            delete widget;  // Remove the old chart view
+        }
+    }
+
+    ui->layoutChartView->addWidget(chartView);  // Add new chart to the layout
 }
 
 // Slot to export data to PDF
-void MainWindow::exportDataToPDF()
+void EmployeMain::exportDataToPDF()
 {
     QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer en tant que PDF", "", "*.pdf");
     if (!filePath.isEmpty()) {
@@ -236,16 +249,16 @@ void MainWindow::exportDataToPDF()
     }
 }
 
-void MainWindow::searchEmployees(const QString &query) {
+void EmployeMain::searchEmployees(const QString &query) {
     ui->tableView->setModel(etmp.search(query));
 }
-void MainWindow::on_pushButton_openQRCodeDialog_clicked()
+void EmployeMain::on_pushButton_openQRCodeDialog_clicked()
 {
     QRCodeDialog dialog(this);  // Create an instance of the dialog
     dialog.setWindowTitle("Generate Employee QR Code");
     dialog.exec();  // Show the dialog
 }
-void MainWindow::toggleTheme() {
+void EmployeMain::toggleTheme() {
     if (isDarkMode) {
         // Switch to light mode
         QApplication::setPalette(QApplication::style()->standardPalette());
@@ -271,12 +284,8 @@ void MainWindow::toggleTheme() {
         QMessageBox::information(this, "Mode Sombre", "Le mode sombre est activé.");
     }
 }
-void MainWindow::openSendSmsDialog() {
-    SendSmsDialog dialog(this);
-    dialog.setWindowTitle("Send SMS to Employee");
-    dialog.exec();  // Show the dialog
-}
-QString MainWindow::getPhoneNumberForEmployee(const QString &id)
+
+QString EmployeMain::getPhoneNumberForEmployee(const QString &id)
 {
     QSqlQuery query;
     query.prepare("SELECT PHONE FROM EMPLOYEE WHERE ID = :ID");
@@ -294,11 +303,7 @@ QString MainWindow::getPhoneNumberForEmployee(const QString &id)
     return "";  // Return empty string if phone number not found
 }
 
-void MainWindow::openLogViewer() {
+void EmployeMain::openLogViewer() {
     LogViewer *logViewer = new LogViewer(this);
     logViewer->exec();  // Show as a modal dialog
-}
-void MainWindow::on_pushButton_loginwindow_clicked()
-{
-    loginWindow->show();  // Just show the login window
 }

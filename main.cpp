@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     // Check if login was successful (QDialog::Accepted)
     if (result == QDialog::Accepted) {
-        MainWindow w;  // Main window
+        EmployeMain w;  // Main window
         w.show();  // Show the main window
         return a.exec();  // Start the event loop for the main window
     }

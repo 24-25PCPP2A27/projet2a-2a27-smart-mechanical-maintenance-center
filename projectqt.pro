@@ -1,5 +1,6 @@
-QT       += sql printsupport charts network
+QT       += sql printsupport charts network serialport quick qml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+LIBS += -lQt5Qml
 
 CONFIG += c++11
 
@@ -8,6 +9,7 @@ CONFIG += c++11
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_NO_QML_DEBUG
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -16,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     EmployeMain.cpp \
+    arduino.cpp \
     connection.cpp \
     employe.cpp \
     forgotpassworddialog.cpp \
@@ -24,11 +27,10 @@ SOURCES += \
     main.cpp \
     qrcodedialog.cpp \
     qrcodegen.cpp \
-    sendsmsdialog.cpp \
-    smshandler.cpp
 
 HEADERS += \
     EmployeMain.h \
+    arduino.h \
     connection.h \
     employe.h \
     forgotpassworddialog.h \
@@ -36,15 +38,12 @@ HEADERS += \
     logviewer.h \
     qrcodedialog.h \
     qrcodegen.h \
-    sendsmsdialog.h \
-    smshandler.h
 
 FORMS += \
     EmployeMain.ui \
     forgotpassworddialog.ui \
     login.ui \
-    qrcodedialog.ui \
-    sendsmsdialog.ui
+    qrcodedialog.ui
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

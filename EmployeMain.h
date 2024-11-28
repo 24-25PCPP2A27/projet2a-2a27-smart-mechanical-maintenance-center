@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef EMPLOYE_MAIN_H
+#define EMPLOYE_MAIN_H
 
 #include <QMainWindow>
 #include <QSqlQueryModel>
@@ -14,19 +14,18 @@
 #include "qrcodedialog.h"
 #include <QSystemTrayIcon>
 #include "login.h"
-
+#include "ui_EmployeMain.h"
 
 namespace Ui {
-class MainWindow;
+class EmployeMain;
 }
-
-class MainWindow : public QMainWindow
+class EmployeMain : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit EmployeMain(QWidget *parent = nullptr);
+    ~EmployeMain();
      QString getPhoneNumberForEmployee(const QString &id);
 
 private slots:
@@ -35,21 +34,20 @@ private slots:
     void on_pushButton_update_clicked();
     void refreshData();
     void sortDataBySalaire();
-    void displayDureeStatistics();
     void exportDataToPDF();
     void searchEmployees(const QString &query);
     void on_pushButton_openQRCodeDialog_clicked();
     void toggleTheme();
-    void openSendSmsDialog();
     void openLogViewer();
-    void on_pushButton_loginwindow_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::EmployeMain *ui;
     employe etmp;  // Object of the 'employe' class for employee operations
     bool isDarkMode = false;
     QSystemTrayIcon *trayIcon;
     Login *loginWindow;
+    QTimer *refreshTimer;
+    void refreshDureeStatistics();
 
 
 };

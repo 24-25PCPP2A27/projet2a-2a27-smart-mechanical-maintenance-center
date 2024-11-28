@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>EmployeMain</class>
+ <widget class="QMainWindow" name="EmployeMain">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -159,7 +159,7 @@ QPushButton:hover {
       <x>440</x>
       <y>0</y>
       <width>991</width>
-      <height>981</height>
+      <height>711</height>
      </rect>
     </property>
    </widget>
@@ -346,40 +346,11 @@ QPushButton:hover {
      <string>Tri</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_statistics">
-    <property name="geometry">
-     <rect>
-      <x>1690</x>
-      <y>840</y>
-      <width>161</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-    background-color: Red;
-    color: rgb(255, 255, 255);
-    border: 2px solid rgb(255, 0, 0); 
-    border-radius: 20px; 
-    padding: 10px; 
-    transition: background-color 0.3s, color 0.3s; 
-}
-QPushButton:hover {
-    background-color: gray;
-    color: black;
-    border: 4px solid rgb(255, 255, 255); 
-    outline: none; 
-}</string>
-    </property>
-    <property name="text">
-     <string>stat</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_export_pdf">
     <property name="geometry">
      <rect>
       <x>1690</x>
-      <y>890</y>
+      <y>840</y>
       <width>161</width>
       <height>41</height>
      </rect>
@@ -430,14 +401,20 @@ QPushButton:hover {
    <widget class="QLabel" name="label_Image">
     <property name="geometry">
      <rect>
-      <x>1660</x>
-      <y>20</y>
-      <width>231</width>
-      <height>121</height>
+      <x>-10</x>
+      <y>-180</y>
+      <width>2061</width>
+      <height>1321</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>F:/Qt projet/Employee/5.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_RDV">
@@ -473,8 +450,8 @@ QPushButton:hover {
    <widget class="QPushButton" name="pushButton_Vehicules">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>120</y>
+      <x>90</x>
+      <y>30</y>
       <width>241</width>
       <height>61</height>
      </rect>
@@ -503,8 +480,8 @@ QPushButton:hover {
    <widget class="QPushButton" name="pushButton_Services">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>300</y>
+      <x>90</x>
+      <y>120</y>
       <width>241</width>
       <height>61</height>
      </rect>
@@ -528,36 +505,6 @@ QPushButton:hover {
     </property>
     <property name="text">
      <string>Services</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_loginwindow">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>30</y>
-      <width>241</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	font: 16pt &quot;MS Shell Dlg 2&quot;;
-    background-color: white;
-    color: rgb(0, 0, 0);
-    border: 2px solid rgb(255, 0, 0); 
-    border-radius: 20px; 
-    padding: 10px; 
-    transition: background-color 0.3s, color 0.3s; 
-}
-QPushButton:hover {
-    background-color: rgb(255, 0, 0);
-    color: black;
-    border: 4px solid rgb(255, 255, 255); 
-    outline: none; 
-}</string>
-    </property>
-    <property name="text">
-     <string>Login</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_mdp">
@@ -586,35 +533,6 @@ QPushButton:hover {
      <string>MDP</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_openQRCodeDialog">
-    <property name="geometry">
-     <rect>
-      <x>1550</x>
-      <y>800</y>
-      <width>111</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-    background-color: Red;
-    color: rgb(255, 255, 255);
-    border: 2px solid rgb(255, 0, 0); 
-    border-radius: 20px; 
-    padding: 10px; 
-    transition: background-color 0.3s, color 0.3s; 
-}
-QPushButton:hover {
-    background-color: rgb(255, 255, 255);
-    color: black;
-    border: 4px solid rgb(255, 255, 255); 
-    outline: none; 
-}</string>
-    </property>
-    <property name="text">
-     <string>QR</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_toggleTheme">
     <property name="geometry">
      <rect>
@@ -628,24 +546,11 @@ QPushButton:hover {
      <string>Theme</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_sendSms">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>970</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>SMS</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_showLogs">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>1000</y>
+      <x>220</x>
+      <y>940</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -654,6 +559,78 @@ QPushButton:hover {
      <string>Historique</string>
     </property>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>439</x>
+      <y>709</y>
+      <width>991</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="layoutChartView"/>
+   </widget>
+   <widget class="QPushButton" name="pushButton_RDV_2">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>310</y>
+      <width>241</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+	font: 16pt &quot;MS Shell Dlg 2&quot;;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 0, 0);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+    </property>
+    <property name="text">
+     <string>EQUIPEMENT</string>
+    </property>
+   </widget>
+   <zorder>label_Image</zorder>
+   <zorder>lineEdit_ID</zorder>
+   <zorder>lineEdit_nom</zorder>
+   <zorder>lineEdit_prenom</zorder>
+   <zorder>lineEdit_salaire</zorder>
+   <zorder>lineEdit_poste</zorder>
+   <zorder>lineEdit_date</zorder>
+   <zorder>pushButton_ajouter</zorder>
+   <zorder>pushButton_supprimer</zorder>
+   <zorder>tableView</zorder>
+   <zorder>pushButton_update</zorder>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>pushButton_refresh</zorder>
+   <zorder>pushButton_sort</zorder>
+   <zorder>pushButton_export_pdf</zorder>
+   <zorder>lineEdit_search</zorder>
+   <zorder>label_8</zorder>
+   <zorder>pushButton_RDV</zorder>
+   <zorder>pushButton_Vehicules</zorder>
+   <zorder>pushButton_Services</zorder>
+   <zorder>lineEdit_mdp</zorder>
+   <zorder>label_9</zorder>
+   <zorder>pushButton_toggleTheme</zorder>
+   <zorder>pushButton_showLogs</zorder>
+   <zorder>horizontalLayoutWidget</zorder>
+   <zorder>pushButton_RDV_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
