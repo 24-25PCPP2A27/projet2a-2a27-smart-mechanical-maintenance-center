@@ -67,8 +67,10 @@ public:
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QObject>
 
 class Service {
+
 private:
     int idserv ;
     double coutserv;
@@ -109,6 +111,8 @@ public:
     QSqlQueryModel* trier(const QString& critere, const QString& ordre);
 
     void genererPDF();
+
+    void onSendMessage();
 
 };
 

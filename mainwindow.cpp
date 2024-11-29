@@ -112,6 +112,7 @@ void MainWindow::on_pdfButton_clicked()
 */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "connection.h"
 #include <QMessageBox>
 #include <QSqlQueryModel>
 #include <QSqlQuery>
@@ -143,6 +144,8 @@ MainWindow::MainWindow(QWidget *parent)
 
        // Appeler la méthode pour charger les données au démarrage
        afficherServices();
+       // Connect the "Send Message" button
+           connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::onSendMessage);
 }
 
 MainWindow::~MainWindow() {
@@ -610,7 +613,7 @@ void MainWindow::on_deleteButton_clicked() {
 void MainWindow::afficherServices()
 {
     QSqlTableModel *model = new QSqlTableModel(this);
-    model->setTable("services"); // Assurez-vous que "services" est le nom de votre table SQL
+    model->setTable("Services");
     model->select();
 
     ui->tableView->setModel(model);
@@ -619,37 +622,39 @@ void MainWindow::afficherServices()
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 void MainWindow::onSendMessage() {
- /*   QString userInput = ui->inputField->text();
+    // Get user input
+    QString userInput = ui->inputField->text();
 
+    // Check if input is empty
     if (userInput.isEmpty()) {
         QMessageBox::warning(this, "Warning", "Please enter a message.");
         return;
     }
 
-    // Append user message to chat display
+    // Append user message to the chat display (Ensure chatDisplay is a QTextEdit)
     ui->chatDisplay->append("You: " + userInput);
 
-    // Process the user's input
+    // Process user input
     QString response;
     if (userInput.toLower().contains("information")) {
         response = "Please provide your service ID.";
-    } else if (userInput.toInt() > 0) { // Assume user entered an ID
-        int idServ = userInput.toInt();
+    } else if (userInput.toInt() > 0) { // Assume user entered a valid service ID
+        int idserv = userInput.toInt();
         QSqlQuery query;
-        query.prepare("SELECT type, duree, etats, cout FROM Services WHERE idServ = :idServ");
-        query.bindValue(":idServ", idServ);
+        query.prepare("SELECT type, duree, etats, cout FROM Services WHERE IDSERV = :idserv");
+        query.bindValue(":idserv", idserv);
 
         if (query.exec() && query.next()) {
-            QString type = query.value(0).toString();
-            QString duree = query.value(1).toString();
-            QString etats = query.value(2).toString();
-            double cout = query.value(3).toDouble();
+            QString typeserv = query.value(0).toString();
+            QString dureeserv = query.value(1).toString();
+            QString etatsserv = query.value(2).toString();
+            double coutserv = query.value(3).toDouble();
 
             response = QString("Service Found:\nType: %1\nDuration: %2\nStatus: %3\nCost: %4")
-                           .arg(type)
-                           .arg(duree)
-                           .arg(etats)
-                           .arg(cout);
+                           .arg(typeserv)
+                           .arg(dureeserv)
+                           .arg(etatsserv)
+                           .arg(coutserv);
         } else {
             response = "No service found with the given ID.";
         }
@@ -659,11 +664,13 @@ void MainWindow::onSendMessage() {
         response = "Sorry, I didn't understand that. You can ask for service information or cost.";
     }
 
-    // Append bot response to chat display
+    // Append the bot's response to the chat display
     ui->chatDisplay->append("Bot: " + response);
 
-    // Clear input field
+    // Clear the input field
     ui->inputField->clear();
-
-*/
 }
+
+
+
+

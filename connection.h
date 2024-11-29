@@ -9,6 +9,12 @@ public:
     connection();
     bool createconnection();
     void closeconnection();
-};
+
+
+
+    };
+
 
 #endif // CONNECTION_Ha
+
+

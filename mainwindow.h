@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow {  // Hérite correctement de QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
       void afficherServices();
 
 private slots:

@@ -25,5 +25,3 @@ void connection::closeconnection(){
     db.close();
 }
 
-
-
