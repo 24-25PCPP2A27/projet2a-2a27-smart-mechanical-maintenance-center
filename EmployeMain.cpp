@@ -145,6 +145,15 @@ void EmployeMain::on_pushButton_update_clicked()
 void EmployeMain::refreshData()
 {
     ui->tableView->setModel(etmp.afficher());
+
+    // Set the columns to stretch to fill the available space
+    QHeaderView *header = ui->tableView->horizontalHeader();
+    header->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Resize rows to fit content
+    ui->tableView->resizeRowsToContents();
+
+    // Clear all the line edits
     ui->lineEdit_ID->clear();
     ui->lineEdit_nom->clear();
     ui->lineEdit_prenom->clear();
@@ -153,6 +162,7 @@ void EmployeMain::refreshData()
     ui->lineEdit_date->clear();
     ui->lineEdit_mdp->clear();
 }
+
 
 // Slot to sort data by SALAIRE
 void EmployeMain::sortDataBySalaire()

@@ -1,4 +1,4 @@
-QT       += sql printsupport charts network serialport quick qml
+QT       += sql printsupport charts network serialport quick qml multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 LIBS += -lQt5Qml
 
@@ -21,6 +21,7 @@ SOURCES += \
     arduino.cpp \
     connection.cpp \
     employe.cpp \
+    employeeprofiledialog.cpp \
     forgotpassworddialog.cpp \
     login.cpp \
     logviewer.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     arduino.h \
     connection.h \
     employe.h \
+    employeeprofiledialog.h \
     forgotpassworddialog.h \
     login.h \
     logviewer.h \
@@ -41,6 +43,7 @@ HEADERS += \
 
 FORMS += \
     EmployeMain.ui \
+    employeeprofiledialog.ui \
     forgotpassworddialog.ui \
     login.ui \
     qrcodedialog.ui

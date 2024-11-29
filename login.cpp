@@ -9,6 +9,7 @@
 #include <QTextStream>
 #include <QDateTime>
 #include "arduino.h"
+#include "employeeprofiledialog.h"
 
 // Constructor
 Login::Login(QWidget *parent) :
@@ -109,47 +110,82 @@ void Login::handleRFIDInput() {
     static QString buffer;  // Buffer to store incoming RFID data
     QByteArray rfidData = arduino->read_from_arduino(); // Read data from Arduino
 
+    // Update label to show "Scanning card..."
+    ui->labelStatus->setText("Scanning card...");
+
     if (rfidData.isEmpty()) {
         qDebug() << "No data received from Arduino.";
         return;
     }
 
-    // Convert incoming data to QString and append to the buffer
+    // Convert incoming data to QString and append it to the buffer
     buffer += QString(rfidData).trimmed();
     qDebug() << "Current buffer content:" << buffer;
 
     // Define the length of the UID (8 characters for MIFARE Classic)
-    const int uidLength = 8; // Update if necessary for different card types
+    const int uidLength = 8;
 
     // Process the buffer in chunks of the UID length
     while (buffer.length() >= uidLength) {
         QString completeRFID = buffer.left(uidLength); // Extract the first UID
         buffer.remove(0, uidLength); // Remove the processed UID from the buffer
 
-        // Ensure we have a valid RFID (UID)
+        // Ensure the UID is of the correct length
         if (completeRFID.length() == uidLength) {
             writeLog("RFID scanned: " + completeRFID, "RFID");
             qDebug() << "RFID data processed:" << completeRFID;
 
-            // Query the database for the RFID
+            // Query the database for employee details using the RFID
             QSqlQuery query;
-            query.prepare("SELECT * FROM EMPLOYEE WHERE RFID = :rfid");
+            query.prepare("SELECT NOM, PRENOM, POSTE, SALAIRE, DUREE, IMAGE FROM EMPLOYEE WHERE RFID = :rfid");
             query.bindValue(":rfid", completeRFID);
 
             if (query.exec()) {
                 if (query.next()) {
-                    QString username = query.value("NOM").toString();
-                    QMessageBox::information(this, "Login", "RFID login successful for user: " + username);
-                    writeLog("RFID login successful for user: " + username, "RFID");
-                    accept();  // Close the login dialog
+                    // Retrieve employee details from the database
+                    QString nom = query.value("NOM").toString();
+                    QString prenom = query.value("PRENOM").toString();
+                    QString poste = query.value("POSTE").toString();
+                    int salaire = query.value("SALAIRE").toInt();
+                    int duree = query.value("DUREE").toInt();
+                    QString imagePath = query.value("IMAGE").toString();
+
+                    // Load the profile picture from the file path
+                    QPixmap profilePicture;
+                    if (!profilePicture.load(imagePath)) {
+                        qDebug() << "Failed to load profile picture from path:" << imagePath;
+                        QMessageBox::warning(this, "Image Error", "Failed to load profile picture for user: " + nom);
+                    }
+
+                    // Display employee profile in a custom dialog
+                    EmployeeProfileDialog *profileDialog = new EmployeeProfileDialog(this);
+                    profileDialog->setEmployeeDetails(nom, prenom, poste, salaire, duree, profilePicture);
+                    profileDialog->displayEmployeeLogs(completeRFID);
+                    profileDialog->exec();
+
+                    writeLog("RFID login successful for user: " + nom + " " + prenom, "RFID");
+                    ui->labelStatus->setText("Scan successful for: " + nom + " " + prenom);
+
+                    // After showing the profile, proceed with the login process
+                    QMessageBox::information(this, "Login", "Welcome, " + nom + "!");
+                    accept();  // Close the login dialog and continue
+                    return;
                 } else {
                     QMessageBox::warning(this, "Login", "Unknown RFID tag.");
                     writeLog("Unknown RFID scanned: " + completeRFID, "RFID");
+                    ui->labelStatus->setText("Unknown RFID tag.");
                 }
             } else {
                 qDebug() << "Database query failed: " << query.lastError().text();
                 QMessageBox::critical(this, "Error", "Failed to execute query.");
+                writeLog("Database query error: " + query.lastError().text(), "RFID");
+                ui->labelStatus->setText("Error during scan.");
             }
         }
+    }
+
+    // Reset the label to default if the buffer is empty
+    if (buffer.isEmpty()) {
+        ui->labelStatus->setText("Please scan your card...");
     }
 }
