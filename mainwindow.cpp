@@ -126,7 +126,8 @@ void MainWindow::on_pdfButton_clicked()
 #include <QPainter>
 #include <QPrinter>
 #include <QSqlTableModel>
-
+#include "qcustomplot.h"
+#include <QSqlError>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) , ui(new Ui::MainWindow) {
@@ -291,17 +292,8 @@ void MainWindow::on_pushButton_clicked() {
 void MainWindow::on_conversionenpdf_clicked() {
     qDebug() << "Génération du PDF...";
 
-    // Connexion à la base de données
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-    db.setDatabaseName("DSN=CPP_Project"); // Remplacez par votre nom de source de données
-
-    if (!db.open()) {
-        qDebug() << "Erreur de connexion à la base de données:" << db.lastError().text();
-        QMessageBox::critical(this, "Erreur", "Connexion à la base de données échouée.");
-        return;
-    }
-
-    tmpService.genererPDF(); // Passez la base de données
+    // Call the PDF generation function
+    tmpService.genererPDF();
     QMessageBox::information(this, "PDF", "Fichier PDF généré avec succès.");
 }
 
@@ -404,7 +396,7 @@ void MainWindow::on_rechercher_clicked() {
     }
 }
 
-void MainWindow::on_statistique_clicked() {
+/*void MainWindow::on_statistique_clicked() {
     // Préparer la requête pour obtenir les données de statistiques
     QSqlQuery query("SELECT etats, COUNT(*) AS count FROM services GROUP BY etats");
     QVector<QPair<QString, int>> data;
@@ -461,9 +453,59 @@ void MainWindow::on_statistique_clicked() {
     label->setAttribute(Qt::WA_DeleteOnClose);
     label->show();
 }
+*/
+void MainWindow::on_statistique_clicked() {
+    QMap<QString, int> stats = tmpService.statistiquesParEtats();
+    if (stats.isEmpty()) {
+        QMessageBox::warning(this, "Statistiques", "Aucune donnée trouvée pour les statistiques par états.");
+        return;
+    }
 
+    // Create a QCustomPlot widget
+    QCustomPlot *customPlot = new QCustomPlot();
+    customPlot->setFixedSize(641, 441); // Set custom size
 
+    // Create a QGraphicsScene and add the customPlot to it
+    QGraphicsScene *scene = new QGraphicsScene(this);
+    scene->addWidget(customPlot);
 
+    // Set the scene to the QGraphicsView
+    ui->graphicsView_salaire->setScene(scene);
+
+    // Prepare data for the chart
+    QVector<double> xValues;
+    QVector<double> yValues;
+    QVector<QString> labels; // To hold the labels for the x-axis
+    int index = 0;
+    for (auto it = stats.begin(); it != stats.end(); ++it) {
+        xValues.append(index++);
+        yValues.append(it.value());
+        labels.append(it.key()); // Store label for each data point
+    }
+
+    // Add a bar graph to the custom plot
+    customPlot->addGraph();
+    customPlot->graph(0)->setData(xValues, yValues);
+    customPlot->graph(0)->setName("Statistiques des services");
+
+    // Set the labels for the axes
+    customPlot->xAxis->setLabel("État");
+    customPlot->yAxis->setLabel("Nombre de services");
+
+    // Set custom tick labels for the x-axis using a ticker
+    QSharedPointer<QCPAxisTickerText> ticker(new QCPAxisTickerText());
+    ticker->addTicks(xValues, labels);
+    customPlot->xAxis->setTicker(ticker);
+
+    // Adjust y-axis range to fit the data
+    customPlot->yAxis->setRange(0, *std::max_element(yValues.begin(), yValues.end()) + 1);
+
+    // Rotate x-axis labels for better readability (if needed)
+    customPlot->xAxis->setTickLabelRotation(45);
+
+    // Replot the chart to apply the changes
+    customPlot->replot();
+}
 
 
 
@@ -506,7 +548,7 @@ void MainWindow::on_updateButton_clicked() {
 
         // Prepare the query to update the service record
         QSqlQuery query;
-        query.prepare("UPDATE Services SET TYPESERV = :typeserv, DUREESERV = :dureeserv, ETATSSERV = :etatsserv, COUTSERV = :coutserv WHERE IDSERV = :idserv");
+        query.prepare("UPDATE Services SET TYPE = :typeserv, DUREE = :dureeserv, ETATS = :etatsserv, COUT = :coutserv WHERE IDSERV = :idserv");
         query.bindValue(":typeserv", newType);
         query.bindValue(":dureeserv", newDuree);
         query.bindValue(":etatsserv", newEtats);
@@ -532,6 +574,7 @@ void MainWindow::on_updateButton_clicked() {
             qDebug() << "Database Error: " << query.lastError().text();
         }
 }
+
 
 void MainWindow::on_deleteButton_clicked() {
     int idserv = ui->idserv->text().toInt();

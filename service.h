@@ -2,28 +2,61 @@
 #define SERVICE_H
 
 #include <QString>
-#include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QMap>
 
 class Service {
-public:
-    Service();
-    Service(int id, double cout, QString type, double duree, QString etats);
-
-    bool ajouter(int idserv, const QString &type, double duree, const QString &etats, float cout);
-    bool modifier(int id, const QString &type, double duree, double cout);
-    bool supprimer(int id);
-
-    QSqlQueryModel* rechercher(const QString &keyword);
-    QSqlQueryModel* trier(const QString &critere, const QString &ordre);
-    QSqlQueryModel* obtenirStatistiquesService();
-
 private:
-    int id;
-    double cout;
-    double duree;
-    QString type;
-    QString etats;
+    int idserv;
+    double coutserv;
+    QString typeserv;
+    QString dureeserv; // Changed from double to QString
+    QString etatsserv;
+
+public:
+    // Constructors
+    Service();
+    Service(int idserv, double coutserv, QString typeserv, QString duree, QString etatsserv);
+
+    // Getters
+    int getId() const;
+    double getCout() const;
+    QString getType() const;
+    QString getDuree() const; // Changed return type to QString
+    QString getEtats() const;
+
+    // Setters
+    void setId(int idserv);
+    void setCout(double coutserv);
+    void setType(const QString &typeserv);
+    void setDuree(const QString &duree); // Changed parameter type to QString
+    void setEtats(const QString &etatsserv);
+
+    // Method to add a new service
+    bool ajouter(int idserv, const QString &typeserv, const QString &duree, const QString &etatsserv, double coutserv);
+
+    // Method to display services
+    QSqlQueryModel* afficher();
+
+    // Method to delete a service by ID
+    bool supprimer(int idserv);
+
+    // Method to modify an existing service
+    bool modifier(int idserv);
+
+    // Method to search for a service by ID
+    QSqlQueryModel* rechercher(int idrech);
+
+    // Method to sort services based on a given criteria and order
+    QSqlQueryModel* trier(const QString& critere, const QString& ordre);
+
+    // Method to generate a PDF report of the services
+    void genererPDF();
+
+    // Method to get statistics on the number of services by state
+    QMap<QString, int> statistiquesParEtats();
 };
 
 #endif // SERVICE_H
@@ -72,6 +105,7 @@ public:
     // Functionalities
     QSqlQueryModel* rechercher(int idrech);
 
+    QMap<QString, int> statistiquesParEtats();
     QSqlQueryModel* trier(const QString& critere, const QString& ordre);
 
     void genererPDF();

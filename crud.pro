@@ -19,11 +19,13 @@ SOURCES += \
     connection.cpp \
     main.cpp \
     mainwindow.cpp \
+    qcustomplot.cpp \
     service.cpp
 
 HEADERS += \
     connection.h \
     mainwindow.h \
+    qcustomplot.h \
     service.h
 
 FORMS += \
