@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <QSqlTableModel>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -7,6 +8,13 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include "RDV.h"
+#include <QDebug>
+
+// Calendar
+#include <QMap>
+#include <QDate>
+#include <QStringList>
+#include <QCalendarWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,19 +41,28 @@ private slots:
     void loadAppointments();
 
     // Slot for exporting the appointments table to a PDF file
-   void exportToPDF();
+    void exportToPDF();
 
     void generateCountryStatistics();
 
-     void sortAppointmentsByID();
+    void sortAppointmentsByID();
 
-     void searchAppointments(const QString &searchQuery);
+    void searchAppointments(const QString &searchQuery);
+
+    void showAppointmentsOnCalendar();
+
+     void onCalendarDateClicked(const QDate &date);
+
 private:
+    QMap<QDate, QStringList> appointments; // Map to store appointments by date
     Ui::MainWindow *ui;
-     QSqlTableModel *appointmentsModel = nullptr;
-     QNetworkAccessManager *networkManager;
-     void sendEmail(const QString &to, const QString &subject, const QString &body);
+    QSqlTableModel *appointmentsModel = nullptr;
+    QNetworkAccessManager *networkManager;
 
+    // Widget declaration
+    QCalendarWidget *calendarWidget; // Declare as a member of MainWindow
+
+    void sendEmail(const QString &to, const QString &subject, const QString &body);
 };
 
 #endif // MAINWINDOW_H
