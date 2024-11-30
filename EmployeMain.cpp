@@ -43,6 +43,7 @@ EmployeMain::EmployeMain(QWidget *parent)
     connect(ui->pushButton_export_pdf, &QPushButton::clicked, this, &EmployeMain::exportDataToPDF);
     connect(ui->pushButton_toggleTheme, &QPushButton::clicked, this, &EmployeMain::toggleTheme);
     connect(ui->pushButton_showLogs, &QPushButton::clicked, this, &EmployeMain::openLogViewer);
+
     refreshTimer = new QTimer(this);
     connect(refreshTimer, &QTimer::timeout, this, &EmployeMain::refreshDureeStatistics);
     refreshTimer->start(10000); // Set interval to 10000ms (10 seconds)
@@ -295,23 +296,6 @@ void EmployeMain::toggleTheme() {
     }
 }
 
-QString EmployeMain::getPhoneNumberForEmployee(const QString &id)
-{
-    QSqlQuery query;
-    query.prepare("SELECT PHONE FROM EMPLOYEE WHERE ID = :ID");
-    query.bindValue(":ID", id);
-
-    if (!query.exec()) {
-        qDebug() << "Query execution failed: " << query.lastError().text();
-        return "";
-    }
-
-    if (query.next()) {
-        return query.value("PHONE").toString();  // Return the phone number from the query result
-    }
-
-    return "";  // Return empty string if phone number not found
-}
 
 void EmployeMain::openLogViewer() {
     LogViewer *logViewer = new LogViewer(this);

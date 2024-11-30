@@ -10,6 +10,7 @@
 #include <QDateTime>
 #include "arduino.h"
 #include "employeeprofiledialog.h"
+#include "EmployeMain.h"
 
 // Constructor
 Login::Login(QWidget *parent) :
@@ -50,16 +51,18 @@ Login::~Login()
 // Login button clicked handler
 void Login::on_pushButton_login_clicked()
 {
-    QString username = ui->lineEdit_username->text();  // Get username from the input
-    QString password = ui->lineEdit_password->text();  // Get password from the input
+    QString username = ui->lineEdit_username->text();  // Get username
+    QString password = ui->lineEdit_password->text();  // Get password
 
-    writeLog("Login attempt by user: " + username, "login");
-
-    // Check for admin login
+    // Check for admin login (for now)
     if (username == "admin" && password == "admin") {
         QMessageBox::information(this, "Login", "Admin login successful!");
-        writeLog("Admin login successful for user: " + username, "login");
-        accept();
+
+        // Show the EmployeMain window for admin (for now all users go here)
+        EmployeMain *employeMain = new EmployeMain();
+        employeMain->setWindowTitle("Employee Management");
+        employeMain->show();  // Show the main window
+        this->close();  // Close the login dialog
         return;
     }
 
@@ -69,20 +72,42 @@ void Login::on_pushButton_login_clicked()
     query.bindValue(":username", username);
     query.bindValue(":password", password);
 
-    if (query.exec()) {
-        if (query.next()) {
-            QMessageBox::information(this, "Login", "Login successful!");
-            writeLog("Login successful for user: " + username, "login");
-            accept();
+    if (query.exec() && query.next()) {
+        QMessageBox::information(this, "Login", "Login successful!");
+
+        // Retrieve the role (POSTE) for future checks
+        QString poste = query.value("POSTE").toString();
+
+        // Commented Role-Based Navigation
+        /*
+        if (poste == "ResponsableRDV") {
+            AdminMain *adminMain = new AdminMain();
+            adminMain->setWindowTitle("Admin Panel");
+            adminMain->show();
+        } else if (poste == "ResponsableService") {
+            TechnicianMain *technicianMain = new TechnicianMain();
+            technicianMain->setWindowTitle("Technician Panel");
+            technicianMain->show();
         } else {
-            QMessageBox::warning(this, "Login", "Incorrect username or password.");
-            writeLog("Failed login attempt for user: " + username, "login");
+            EmployeMain *employeMain = new EmployeMain();
+            employeMain->setWindowTitle("Employee Panel");
+            employeMain->show();
         }
+        */
+
+        // Temporary: All users go to EmployeMain
+        EmployeMain *employeMain = new EmployeMain();
+        employeMain->setWindowTitle("Employee Management");
+        employeMain->show();
+
+        this->close();  // Close the login dialog
     } else {
-        qDebug() << "Database query failed: " << query.lastError().text();
-        QMessageBox::critical(this, "Error", "Failed to execute query.");
+        QMessageBox::warning(this, "Login", "Incorrect username or password.");
     }
 }
+
+
+
 
 // Forgot password button clicked handler
 void Login::on_pushButton_forgotPassword_clicked()
@@ -166,10 +191,34 @@ void Login::handleRFIDInput() {
                     writeLog("RFID login successful for user: " + nom + " " + prenom, "RFID");
                     ui->labelStatus->setText("Scan successful for: " + nom + " " + prenom);
 
-                    // After showing the profile, proceed with the login process
-                    QMessageBox::information(this, "Login", "Welcome, " + nom + "!");
-                    accept();  // Close the login dialog and continue
-                    return;
+                    // Commented Role-Based Navigation
+                    /*
+                    if (poste == "ResponsableService") {
+                        AdminMain *adminMain = new AdminMain();
+                        adminMain->setWindowTitle("Admin Panel");
+                        adminMain->show();
+                    } else if (poste == "ResponsableRDV") {
+                        TechnicianMain *technicianMain = new TechnicianMain();
+                        technicianMain->setWindowTitle("Technician Panel");
+                        technicianMain->show();
+                    } else if (poste == "ResponsableRDV") {
+                        TechnicianMain *technicianMain = new TechnicianMain();
+                        technicianMain->setWindowTitle("Technician Panel");
+                        technicianMain->show();
+                    } else if (poste == "ResponsableEmploye" {
+                        EmployeMain *employeMain = new EmployeMain();
+                        employeMain->setWindowTitle("Employee Panel");
+                        employeMain->show();
+                    }
+                    */
+
+                    // Temporary: All users go to EmployeMain
+                    EmployeMain *employeMain = new EmployeMain();
+                    employeMain->setWindowTitle("Employee Management");
+                    employeMain->show();
+
+                    this->close();  // Close the login dialog
+                    return; // Exit the function after handling
                 } else {
                     QMessageBox::warning(this, "Login", "Unknown RFID tag.");
                     writeLog("Unknown RFID scanned: " + completeRFID, "RFID");

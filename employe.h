@@ -46,7 +46,6 @@ public:
     QMap<QString, QVariant> getDureeStatistics();
     bool exportToPDF(const QString &filePath);  // Declare the export function
     QSqlQueryModel* search(const QString &searchQuery);
-    QString getPhoneNumberForEmployee(int employeeId);
 };
 
 #endif // EMPLOYE_H

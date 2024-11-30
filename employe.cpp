@@ -235,20 +235,3 @@ QSqlQueryModel* employe::search(const QString &searchQuery) {
 
     return model;
 }
-QString employe::getPhoneNumberForEmployee(int employeeId) {
-    QSqlQuery query;
-    query.prepare("SELECT PHONE FROM employee WHERE id = :id");
-    query.bindValue(":id", employeeId);
-
-    if (query.exec()) {
-        if (query.next()) {
-            return query.value(0).toString();  // Return the phone number
-        } else {
-            qDebug() << "Employee not found with ID:" << employeeId;
-        }
-    } else {
-        qDebug() << "Query failed:" << query.lastError();
-    }
-
-    return "";  // Return an empty string if the employee is not found or an error occurred
-}

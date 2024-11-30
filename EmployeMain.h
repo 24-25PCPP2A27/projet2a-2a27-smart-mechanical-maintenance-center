@@ -16,6 +16,7 @@
 #include "login.h"
 #include "ui_EmployeMain.h"
 
+
 namespace Ui {
 class EmployeMain;
 }
@@ -26,7 +27,6 @@ class EmployeMain : public QMainWindow
 public:
     explicit EmployeMain(QWidget *parent = nullptr);
     ~EmployeMain();
-     QString getPhoneNumberForEmployee(const QString &id);
 
 private slots:
     void on_pushButton_ajouter_clicked();
@@ -39,6 +39,7 @@ private slots:
     void on_pushButton_openQRCodeDialog_clicked();
     void toggleTheme();
     void openLogViewer();
+
 
 private:
     Ui::EmployeMain *ui;
