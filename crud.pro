@@ -16,20 +16,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ServiceMain.cpp \
+    chatbot.cpp \
+    chatbotdialog.cpp \
     connection.cpp \
     main.cpp \
-    mainwindow.cpp \
     qcustomplot.cpp \
     service.cpp
 
 HEADERS += \
+    ServiceMain.h \
+    chatbot.h \
+    chatbotdialog.h \
     connection.h \
-    mainwindow.h \
     qcustomplot.h \
     service.h
 
 FORMS += \
-    mainwindow.ui
+    ServiceMain.ui \
+    chatbotdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

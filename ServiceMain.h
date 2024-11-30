@@ -41,15 +41,15 @@ private:
 #include "service.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class ServiceMain; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {  // Hérite correctement de QMainWindow
+class ServiceMain : public QMainWindow {  // Hérite correctement de QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit ServiceMain(QWidget *parent = nullptr);
+    ~ServiceMain();
 
       void afficherServices();
 
@@ -61,10 +61,10 @@ private slots:
     void on_rechercher_clicked();
     void on_updateButton_clicked();
     void on_deleteButton_clicked();
-    void onSendMessage();
+    void on_chat_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::ServiceMain *ui;
     Service tmpService;
     Service serviceInstance;// Objet temporaire pour gérer les services
 

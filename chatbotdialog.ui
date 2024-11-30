@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChatBotDialog</class>
+ <widget class="QDialog" name="ChatBotDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>938</width>
+    <height>753</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background: red;</string>
+  </property>
+  <widget class="QPushButton" name="sendButton">
+   <property name="geometry">
+    <rect>
+     <x>734</x>
+     <y>662</y>
+     <width>141</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	font: 16pt &quot;MS Shell Dlg 2&quot;;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 0, 0);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+   </property>
+   <property name="text">
+    <string>Envoyer</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="chatDisplay">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>80</y>
+     <width>661</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTextEdit {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #333333;            /* Dark text color */
+    font-family: 'Arial', sans-serif; /* Clean font family */
+    font-size: 12pt;           /* Font size */
+    border: 1px solid #ccc;    /* Light border for the chat box */
+    border-radius: 10px;       /* Rounded corners */
+    padding: 10px;             /* Padding inside the chat box */
+    margin: 10px;              /* Space outside the chat box */
+    background: white;         /* White background for the messages */
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: #f0f0f0;
+    width: 10px;
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #aaa;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}
+</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="inputField">
+   <property name="geometry">
+    <rect>
+     <x>142</x>
+     <y>480</y>
+     <width>661</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: white;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>30</y>
+     <width>311</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size: 25pt;
+font-family: Arial;
+color: White;</string>
+   </property>
+   <property name="text">
+    <string>CHATBOT</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

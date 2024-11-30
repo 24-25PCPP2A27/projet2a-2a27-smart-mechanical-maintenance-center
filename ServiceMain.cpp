@@ -1,117 +1,6 @@
-/*#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QSqlQueryModel>
-#include <QSqlRecord>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::on_ajouterButton_clicked()
-{
-    int id = ui->idserv->text().toInt();             // Changed to match widget name
-    QString type = ui->typeserv->text();             // Changed to match widget name
-    double duree = ui->dureeserv->text().toDouble(); // Changed to match widget name
-    QString etats = ui->etatsserv->currentText();    // Changed to match widget name
-    float cout = ui->coutserv->text().toFloat();     // Changed to match widget name
-
-    if (tmpService.ajouter(id, type, duree, etats, cout)) {
-        ui->label->setText("Service ajouté avec succès.");
-    } else {
-        ui->label->setText("Erreur lors de l'ajout du service.");
-    }
-}
-
-void MainWindow::on_modifierButton_clicked()
-{
-    int id = ui->idserv->text().toInt();             // Changed to match widget name
-    QString type = ui->typeserv->text();             // Changed to match widget name
-    double duree = ui->dureeserv->text().toDouble(); // Changed to match widget name
-    double cout = ui->coutserv->text().toDouble();   // Changed to match widget name
-
-    if (tmpService.modifier(id, type, duree, cout)) {
-        ui->label->setText("Service modifié avec succès.");
-    } else {
-        ui->label->setText("Erreur lors de la modification du service.");
-    }
-}
-
-void MainWindow::on_supprimerButton_clicked()
-{
-    int id = ui->idserv->text().toInt();             // Changed to match widget name
-
-    if (tmpService.supprimer(id)) {
-        ui->label->setText("Service supprimé avec succès.");
-    } else {
-        ui->label->setText("Erreur lors de la suppression du service.");
-    }
-}
-
-void MainWindow::on_rechercherButton_clicked()
-{
-    QString keyword = ui->rechercheLineEdit->text(); // Changed to match widget name
-    QSqlQueryModel *model = tmpService.rechercher(keyword);
-
-    if (model->rowCount() > 0) {
-        QString result;
-        for (int i = 0; i < model->rowCount(); ++i) {
-            QSqlRecord record = model->record(i);
-            result += "ID: " + record.value("id").toString() + "\n";
-            result += "Type: " + record.value("type").toString() + "\n";
-            result += "Duree: " + record.value("duree").toString() + "\n";
-            result += "Cout: " + record.value("cout").toString() + "\n";
-            result += "Etat: " + record.value("etats").toString() + "\n\n";
-        }
-        ui->label->setText(result);
-    } else {
-        ui->label->setText("Aucun résultat trouvé.");
-    }
-}
-
-void MainWindow::on_afficherButton_clicked()
-{
-    QString critere = ui->critereComboBox->currentText(); // Changed to match widget name
-    QString ordre = ui->ordreComboBox->currentText();     // Changed to match widget name
-
-    QSqlQueryModel *model = tmpService.trier(critere, ordre);
-
-    if (model->rowCount() > 0) {
-        QString result;
-        for (int i = 0; i < model->rowCount(); ++i) {
-            QSqlRecord record = model->record(i);
-            result += "ID: " + record.value("id").toString() + "\n";
-            result += "Type: " + record.value("type").toString() + "\n";
-            result += "Duree: " + record.value("duree").toString() + "\n";
-            result += "Cout: " + record.value("cout").toString() + "\n";
-            result += "Etat: " + record.value("etats").toString() + "\n\n";
-        }
-        ui->label->setText(result);
-    } else {
-        ui->label->setText("Aucun service à afficher.");
-    }
-}
-
-void MainWindow::on_trierButton_clicked()
-{
-    // This method is now handled by the on_afficherButton_clicked() as both are similar.
-}
-
-void MainWindow::on_pdfButton_clicked()
-{
-    // Implement PDF export functionality
-    ui->label->setText("Fonction PDF non implémentée.");
-}
-*/
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "ServiceMain.h"
+#include "ui_ServiceMain.h"
 #include "connection.h"
 #include <QMessageBox>
 #include <QSqlQueryModel>
@@ -128,31 +17,24 @@ void MainWindow::on_pdfButton_clicked()
 #include <QPrinter>
 #include <QSqlTableModel>
 #include "qcustomplot.h"
+#include "chatbotdialog.h"
 #include <QSqlError>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent) , ui(new Ui::MainWindow) {
+ServiceMain::ServiceMain(QWidget *parent)
+    : QMainWindow(parent) , ui(new Ui::ServiceMain) {
     ui->setupUi(this);
      ui->tableView->setModel(tmpService.afficher());
-    // Initialiser la base de données
-       QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE"); // Changez en fonction de votre type de base de données
-       db.setDatabaseName("services.db"); // Chemin vers votre base de données
-       if (!db.open()) {
-           qDebug() << "Erreur lors de l'ouverture de la base de données.";
-           return;
-       }
 
        // Appeler la méthode pour charger les données au démarrage
        afficherServices();
-       // Connect the "Send Message" button
-           connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::onSendMessage);
+       connect(ui->chat, &QPushButton::clicked, this, &ServiceMain::on_chat_clicked);
 }
 
-MainWindow::~MainWindow() {
+ServiceMain::~ServiceMain() {
     delete ui;
 }
 
-/*void MainWindow::on_pushButton_clicked() {
+/*void ServiceMain::on_pushButton_clicked() {
     bool ok ;
     int id = ui->idserv->text().toInt(&ok);
     double cout = ui->coutserv->text().toDouble();
@@ -175,7 +57,7 @@ MainWindow::~MainWindow() {
         QMessageBox::critical(this, "Erreur", "Échec de l'ajout.");
     }
 }*/
-/*void MainWindow::on_pushButton_clicked()
+/*void ServiceMain::on_pushButton_clicked()
 {
     bool ok;
 
@@ -247,7 +129,7 @@ MainWindow::~MainWindow() {
     }
 }
 */
-void MainWindow::on_pushButton_clicked() {
+void ServiceMain::on_pushButton_clicked() {
 
         // Get input values from the UI
         int idserv = ui->idserv->text().toInt(); // Assuming this is used for ID input
@@ -292,7 +174,7 @@ void MainWindow::on_pushButton_clicked() {
 
 
 
-void MainWindow::on_conversionenpdf_clicked() {
+void ServiceMain::on_conversionenpdf_clicked() {
     qDebug() << "Génération du PDF...";
 
     // Call the PDF generation function
@@ -303,7 +185,7 @@ void MainWindow::on_conversionenpdf_clicked() {
 
 /*
 
-void MainWindow::on_conversionenpdf_clicked() {
+void ServiceMain::on_conversionenpdf_clicked() {
     qDebug() << "Génération du PDF...";
 
     if (tmpService.genererPDF()) {
@@ -315,7 +197,7 @@ void MainWindow::on_conversionenpdf_clicked() {
 
 */
 
-void MainWindow::on_trier_clicked() {
+void ServiceMain::on_trier_clicked() {
     if (!QSqlDatabase::database().isOpen()) {
         QMessageBox::critical(this, tr("Erreur"), tr("La connexion à la base de données est fermée."));
         return;
@@ -340,48 +222,8 @@ void MainWindow::on_trier_clicked() {
 
 
 
-/*void MainWindow::on_statistique_clicked() {
-    QSqlQuery query("SELECT etats, COUNT(*) AS count FROM services GROUP BY etats");
-    QVector<QPair<QString, int>> data;
 
-    while (query.next()) {
-        QString etatserv = query.value("etatsserv").toString();
-        int count = query.value("count").toInt();
-        data.append(qMakePair(etatserv, count));
-    }
-
-    if (data.isEmpty()) {
-        QMessageBox::warning(this, "Statistiques", "Aucune donnée disponible pour les statistiques.");
-        return;
-    }
-
-    const int width = 400, height = 400;
-    QImage pieChartImage(width, height, QImage::Format_ARGB32);
-    pieChartImage.fill(Qt::white);
-
-    QPainter painter(&pieChartImage);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    int total = 0;
-    for (const auto &item : data) total += item.second;
-
-    QRectF rect(10, 10, width - 20, height - 20);
-    int startAngle = 0;
-
-    QVector<QColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::yellow, Qt::cyan};
-    for (int i = 0; i < data.size(); ++i) {
-        int angleSpan = static_cast<int>(360.0 * data[i].second / total * 16);
-        painter.setBrush(colors[i % colors.size()]);
-        painter.drawPie(rect, startAngle, angleSpan);
-        startAngle += angleSpan;
-    }
-
-    QLabel *label = new QLabel;
-    label->setPixmap(QPixmap::fromImage(pieChartImage));
-    label->show();
-}
-*/
-void MainWindow::on_rechercher_clicked() {
+void ServiceMain::on_rechercher_clicked() {
     int idrech = ui->idrech->text().toInt();
     if (idrech <= 0) {
         QMessageBox::warning(this, "Erreur", "Veuillez entrer un ID valide.");
@@ -399,7 +241,7 @@ void MainWindow::on_rechercher_clicked() {
     }
 }
 
-/*void MainWindow::on_statistique_clicked() {
+/*void ServiceMain::on_statistique_clicked() {
     // Préparer la requête pour obtenir les données de statistiques
     QSqlQuery query("SELECT etats, COUNT(*) AS count FROM services GROUP BY etats");
     QVector<QPair<QString, int>> data;
@@ -457,7 +299,7 @@ void MainWindow::on_rechercher_clicked() {
     label->show();
 }
 */
-void MainWindow::on_statistique_clicked() {
+void ServiceMain::on_statistique_clicked() {
     QMap<QString, int> stats = tmpService.statistiquesParEtats();
     if (stats.isEmpty()) {
         QMessageBox::warning(this, "Statistiques", "Aucune donnée trouvée pour les statistiques par états.");
@@ -512,7 +354,7 @@ void MainWindow::on_statistique_clicked() {
 
 
 
-void MainWindow::on_updateButton_clicked() {
+void ServiceMain::on_updateButton_clicked() {
     int idserv = ui->idserv->text().toInt();
 
         // Validate the ID (ensure it is greater than 0)
@@ -579,7 +421,7 @@ void MainWindow::on_updateButton_clicked() {
 }
 
 
-void MainWindow::on_deleteButton_clicked() {
+void ServiceMain::on_deleteButton_clicked() {
     int idserv = ui->idserv->text().toInt();
 
         // Validate the input
@@ -610,7 +452,7 @@ void MainWindow::on_deleteButton_clicked() {
 
 
 
-void MainWindow::afficherServices()
+void ServiceMain::afficherServices()
 {
     QSqlTableModel *model = new QSqlTableModel(this);
     model->setTable("Services");
@@ -621,56 +463,10 @@ void MainWindow::afficherServices()
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
-void MainWindow::onSendMessage() {
-    // Get user input
-    QString userInput = ui->inputField->text();
-
-    // Check if input is empty
-    if (userInput.isEmpty()) {
-        QMessageBox::warning(this, "Warning", "Please enter a message.");
-        return;
-    }
-
-    // Append user message to the chat display (Ensure chatDisplay is a QTextEdit)
-    ui->chatDisplay->append("You: " + userInput);
-
-    // Process user input
-    QString response;
-    if (userInput.toLower().contains("information")) {
-        response = "Please provide your service ID.";
-    } else if (userInput.toInt() > 0) { // Assume user entered a valid service ID
-        int idserv = userInput.toInt();
-        QSqlQuery query;
-        query.prepare("SELECT type, duree, etats, cout FROM Services WHERE IDSERV = :idserv");
-        query.bindValue(":idserv", idserv);
-
-        if (query.exec() && query.next()) {
-            QString typeserv = query.value(0).toString();
-            QString dureeserv = query.value(1).toString();
-            QString etatsserv = query.value(2).toString();
-            double coutserv = query.value(3).toDouble();
-
-            response = QString("Service Found:\nType: %1\nDuration: %2\nStatus: %3\nCost: %4")
-                           .arg(typeserv)
-                           .arg(dureeserv)
-                           .arg(etatsserv)
-                           .arg(coutserv);
-        } else {
-            response = "No service found with the given ID.";
-        }
-    } else if (userInput.toLower().contains("cost")) {
-        response = "Please provide the service ID to check the cost.";
-    } else {
-        response = "Sorry, I didn't understand that. You can ask for service information or cost.";
-    }
-
-    // Append the bot's response to the chat display
-    ui->chatDisplay->append("Bot: " + response);
-
-    // Clear the input field
-    ui->inputField->clear();
+void ServiceMain::on_chat_clicked() {
+    ChatBotDialog chatbotDialog(&tmpService, this); // Pass the Service object
+        chatbotDialog.exec();
 }
-
 
 
 

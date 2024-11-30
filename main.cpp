@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "ServiceMain.h"
 #include <QApplication>
 #include <QMessageBox>
 #include "connection.h"
@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    ServiceMain w;
     connection connection;//une seule instance de la classe connection
     bool test=connection.createconnection();//etablir la connexion
     if(test)
