@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql serialport
 QT += printsupport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ServiceMain.cpp \
+    arduino.cpp \
     chatbot.cpp \
     chatbotdialog.cpp \
     connection.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     ServiceMain.h \
+    arduino.h \
     chatbot.h \
     chatbotdialog.h \
     connection.h \

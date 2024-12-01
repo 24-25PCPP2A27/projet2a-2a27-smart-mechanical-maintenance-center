@@ -40,6 +40,8 @@ private:
 #include <QMainWindow>
 #include "service.h"
 
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class ServiceMain; }
 QT_END_NAMESPACE
@@ -62,10 +64,13 @@ private slots:
     void on_updateButton_clicked();
     void on_deleteButton_clicked();
     void on_chat_clicked();
+    void changerEtatEquipement();
+
 
 private:
     Ui::ServiceMain *ui;
     Service tmpService;
+    Service service;
     Service serviceInstance;// Objet temporaire pour gérer les services
 
     };

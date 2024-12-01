@@ -19,10 +19,10 @@
   <widget class="QPushButton" name="sendButton">
    <property name="geometry">
     <rect>
-     <x>734</x>
-     <y>662</y>
-     <width>141</width>
-     <height>51</height>
+     <x>654</x>
+     <y>622</y>
+     <width>221</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">

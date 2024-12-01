@@ -364,6 +364,52 @@ QPushButton:hover {
      <string>ChatBot</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="lineEdit_6">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>280</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Etat equip</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="etatsserv_2">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>280</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>En Service</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>En Panne</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>610</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Equipement </string>
+    </property>
+   </widget>
    <zorder>label_2</zorder>
    <zorder>idrech</zorder>
    <zorder>pushButton</zorder>
@@ -386,6 +432,9 @@ QPushButton:hover {
    <zorder>graphicsView_salaire</zorder>
    <zorder>conversionenpdf</zorder>
    <zorder>chat</zorder>
+   <zorder>lineEdit_6</zorder>
+   <zorder>etatsserv_2</zorder>
+   <zorder>pushButton_2</zorder>
   </widget>
  </widget>
  <resources/>

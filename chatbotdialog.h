@@ -22,6 +22,7 @@ private slots:
 
 private:
     Ui::ChatBotDialog *ui;
+
     ChatBot *chatbotInstance;  // Renamed to avoid conflict
 };
 

@@ -2,6 +2,7 @@
 #include "ServiceMain.h"
 #include "ui_ServiceMain.h"
 #include "connection.h"
+#include "arduino.h"
 #include <QMessageBox>
 #include <QSqlQueryModel>
 #include <QSqlQuery>
@@ -20,115 +21,25 @@
 #include "chatbotdialog.h"
 #include <QSqlError>
 
+Arduino arduino;
 ServiceMain::ServiceMain(QWidget *parent)
     : QMainWindow(parent) , ui(new Ui::ServiceMain) {
     ui->setupUi(this);
+
      ui->tableView->setModel(tmpService.afficher());
 
        // Appeler la méthode pour charger les données au démarrage
        afficherServices();
        connect(ui->chat, &QPushButton::clicked, this, &ServiceMain::on_chat_clicked);
+       // Connexion du bouton à la fonction de changement d'état
+       connect(ui->pushButton_2, &QPushButton::clicked, this, &ServiceMain::changerEtatEquipement);
 }
 
 ServiceMain::~ServiceMain() {
     delete ui;
 }
 
-/*void ServiceMain::on_pushButton_clicked() {
-    bool ok ;
-    int id = ui->idserv->text().toInt(&ok);
-    double cout = ui->coutserv->text().toDouble();
-    QString type = ui->typeserv->text();
-    double duree = ui->lineduree->text().toDouble();
-    QString etats = ui->boxetats->currentText();
 
-
-    // Validate inputs
-    if (id <= 0 || cout <= 0 || type.isEmpty() || duree <= 0 || etats.isEmpty()) {
-        QMessageBox::warning(this, "Erreur", "Veuillez remplir correctement tous les champs.");
-        return;
-    }
-
-    Service s(id, cout, type, duree, etats);
-    if (s.ajouter()) {
-        ui->tableView->setModel(tmpService.afficher());
-        QMessageBox::information(this, "Ajout", "Service ajouté avec succès.");
-    } else {
-        QMessageBox::critical(this, "Erreur", "Échec de l'ajout.");
-    }
-}*/
-/*void ServiceMain::on_pushButton_clicked()
-{
-    bool ok;
-
-    // Lecture et vérification de l'ID
-    int id = ui->idserv->text().toInt(&ok);
-    if (!ok) {
-        QMessageBox::warning(this, tr("Erreur de saisie"),
-                             tr("L'ID doit être un nombre entier."),
-                             QMessageBox::Ok);
-        return;
-    }
-
-    // Lecture du type
-    QString type = ui->typeserv->text();
-    if (type.isEmpty()) {
-        QMessageBox::warning(this, tr("Erreur de saisie"),
-                             tr("Le champ Type ne peut pas être vide."),
-                             QMessageBox::Ok);
-        return;
-    }
-
-    // Lecture et vérification du coût
-    double cout = ui->coutserv->text().toDouble(&ok);
-    if (!ok) {
-        QMessageBox::warning(this, tr("Erreur de saisie"),
-                             tr("Le coût doit être un nombre valide."),
-                             QMessageBox::Ok);
-        return;
-    }
-
-    // Lecture et vérification de la durée
-    double duree = ui->dureeserv->text().toDouble(&ok);
-    if (!ok) {
-        QMessageBox::warning(this, tr("Erreur de saisie"),
-                             tr("La durée doit être un nombre valide."),
-                             QMessageBox::Ok);
-        return;
-    }
-
-    // Lecture de l'état
-    QString etats = ui->etatsserv->currentText();
-    if (etats.isEmpty()) {
-        QMessageBox::warning(this, tr("Erreur de saisie"),
-                             tr("Veuillez sélectionner un état valide."),
-                             QMessageBox::Ok);
-        return;
-    }
-
-    // Création du service et ajout
-    Service s(id, cout, type, duree, etats);
-    bool test = s.ajouter();
-
-    // Vérification du résultat de l'ajout
-    if (test) {
-        QMessageBox::information(this, tr("Succès"),
-                                 tr("Ajout du service effectué avec succès."),
-                                 QMessageBox::Ok);
-
-        // Réinitialiser les champs
-        ui->idserv->clear();
-        ui->typeserv->clear();
-        ui->coutserv->clear();
-        ui->dureeserv->clear();
-        ui->etatsserv->setCurrentIndex(0);
-    } else {
-        QMessageBox::critical(this, tr("Erreur"),
-                              tr("Échec de l'ajout du service."),
-                              QMessageBox::Ok);
-    }
-}
-*/
 void ServiceMain::on_pushButton_clicked() {
 
         // Get input values from the UI
@@ -183,19 +94,7 @@ void ServiceMain::on_conversionenpdf_clicked() {
 }
 
 
-/*
 
-void ServiceMain::on_conversionenpdf_clicked() {
-    qDebug() << "Génération du PDF...";
-
-    if (tmpService.genererPDF()) {
-        QMessageBox::information(this, "PDF", "Le fichier PDF a été généré avec succès.");
-    } else {
-        QMessageBox::critical(this, "Erreur", "Échec de la génération du fichier PDF.");
-    }
-}
-
-*/
 
 void ServiceMain::on_trier_clicked() {
     if (!QSqlDatabase::database().isOpen()) {
@@ -241,64 +140,7 @@ void ServiceMain::on_rechercher_clicked() {
     }
 }
 
-/*void ServiceMain::on_statistique_clicked() {
-    // Préparer la requête pour obtenir les données de statistiques
-    QSqlQuery query("SELECT etats, COUNT(*) AS count FROM services GROUP BY etats");
-    QVector<QPair<QString, int>> data;
 
-    if (!query.exec()) {
-        QMessageBox::critical(this, "Erreur", "Impossible de récupérer les données de statistiques.");
-        return;
-    }
-
-    // Parcourir les résultats et les ajouter au vecteur
-    while (query.next()) {
-        QString etat = query.value("etats").toString(); // Nom correct du champ
-        int count = query.value("count").toInt();
-        data.append(qMakePair(etat, count));
-    }
-
-    // Vérification si des données sont disponibles
-    if (data.isEmpty()) {
-        QMessageBox::warning(this, "Statistiques", "Aucune donnée disponible pour les statistiques.");
-        return;
-    }
-
-    // Dessiner le graphique en camembert
-    const int width = 400, height = 400;
-    QImage pieChartImage(width, height, QImage::Format_ARGB32);
-    pieChartImage.fill(Qt::white);
-
-    QPainter painter(&pieChartImage);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    int total = 0;
-    for (const auto &item : data) total += item.second;
-
-    QRectF rect(10, 10, width - 20, height - 20);
-    int startAngle = 0;
-
-    QVector<QColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::yellow, Qt::cyan};
-    for (int i = 0; i < data.size(); ++i) {
-        int angleSpan = static_cast<int>(360.0 * data[i].second / total * 16); // Calcul de l'angle
-        painter.setBrush(colors[i % colors.size()]);
-        painter.drawPie(rect, startAngle, angleSpan);
-
-        // Légende
-        QString label = QString("%1: %2").arg(data[i].first).arg(data[i].second);
-        painter.drawText(rect.center() + QPoint(0, i * 20 + 10), label);
-
-        startAngle += angleSpan;
-    }
-
-    // Afficher le graphique
-    QLabel *label = new QLabel;
-    label->setPixmap(QPixmap::fromImage(pieChartImage));
-    label->setWindowTitle("Statistiques des services");
-    label->setAttribute(Qt::WA_DeleteOnClose);
-    label->show();
-}
-*/
 void ServiceMain::on_statistique_clicked() {
     QMap<QString, int> stats = tmpService.statistiquesParEtats();
     if (stats.isEmpty()) {
@@ -468,5 +310,44 @@ void ServiceMain::on_chat_clicked() {
         chatbotDialog.exec();
 }
 
+/*void ServiceMain::changerEtatEquipement()
+{
+    QString etatActuel = ui->etatsserv_2->currentText();
+    QString nouvelEtat;
 
+    if (etatActuel == "en panne") {
+        nouvelEtat = "en service";
+    } else {
+        nouvelEtat = "en panne";
+    }
 
+    // Changement de l'état dans l'interface utilisateur
+    ui->etatsserv_2->setCurrentText(nouvelEtat);
+
+    // Envoi de l'information à l'Arduino
+    QByteArray commande = nouvelEtat == "en service" ? "1" : "0"; // Exemple de commande (1 pour "en service", 0 pour "en panne")
+    arduino.write_to_arduino(commande);
+}
+*/
+void ServiceMain::changerEtatEquipement()
+{
+    QString etatActuel = ui->etatsserv_2->currentText();
+    QString nouvelEtat;
+
+    // Détermination du nouvel état
+    if (etatActuel == "en panne") {
+        nouvelEtat = "en service";
+    } else {
+        nouvelEtat = "en panne";
+    }
+
+    // Mise à jour de l'état dans l'interface
+    ui->etatsserv_2->setCurrentText(nouvelEtat);
+
+    // Mise à jour de l'état dans l'objet Service
+    service.setEtatEquipement(nouvelEtat);
+
+    // Envoi de la commande à Arduino
+    QByteArray commande = nouvelEtat == "en service" ? "1" : "0";
+    arduino.write_to_arduino(commande);
+}
