@@ -130,7 +130,6 @@ void Login::writeLog(const QString &message, const QString &category)
     }
 }
 
-// Handle RFID input
 void Login::handleRFIDInput() {
     static QString buffer;  // Buffer to store incoming RFID data
     QByteArray rfidData = arduino->read_from_arduino(); // Read data from Arduino
@@ -175,6 +174,11 @@ void Login::handleRFIDInput() {
                     int duree = query.value("DUREE").toInt();
                     QString imagePath = query.value("IMAGE").toString();
 
+                    // Send the name and surname to the Arduino for LCD display
+                    QString lcdMessage = nom + " " + prenom + "\n";
+                    arduino->write_to_arduino(lcdMessage.toUtf8());
+                    qDebug() << "Sent to Arduino: " << lcdMessage;
+
                     // Load the profile picture from the file path
                     QPixmap profilePicture;
                     if (!profilePicture.load(imagePath)) {
@@ -190,22 +194,19 @@ void Login::handleRFIDInput() {
 
                     writeLog("RFID login successful for user: " + nom + " " + prenom, "RFID");
                     ui->labelStatus->setText("Scan successful for: " + nom + " " + prenom);
-
-                    // Commented Role-Based Navigation
-                    /*
-                    if (poste == "ResponsableService") {
+                    /*if (poste == "ResponsableRDV") {
                         AdminMain *adminMain = new AdminMain();
                         adminMain->setWindowTitle("Admin Panel");
                         adminMain->show();
-                    } else if (poste == "ResponsableRDV") {
+                    } else if (poste == "ResponsableService") {
                         TechnicianMain *technicianMain = new TechnicianMain();
                         technicianMain->setWindowTitle("Technician Panel");
                         technicianMain->show();
-                    } else if (poste == "ResponsableRDV") {
+                    } else if (poste == "ResponsableVehicule") {
                         TechnicianMain *technicianMain = new TechnicianMain();
                         technicianMain->setWindowTitle("Technician Panel");
                         technicianMain->show();
-                    } else if (poste == "ResponsableEmploye" {
+                    } else if (poste == "ResponsableEquipement" {
                         EmployeMain *employeMain = new EmployeMain();
                         employeMain->setWindowTitle("Employee Panel");
                         employeMain->show();
@@ -230,6 +231,11 @@ void Login::handleRFIDInput() {
                 writeLog("Database query error: " + query.lastError().text(), "RFID");
                 ui->labelStatus->setText("Error during scan.");
             }
+        } else {
+            // Clear buffer if the UID length is invalid
+            qDebug() << "Invalid UID length. Clearing buffer.";
+            buffer.clear();
+            ui->labelStatus->setText("Invalid RFID. Please try again.");
         }
     }
 
