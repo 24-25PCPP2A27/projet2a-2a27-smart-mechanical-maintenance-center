@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ServiceMain</class>
+ <widget class="QMainWindow" name="ServiceMain">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1920</width>
+    <height>1080</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="idrech">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>130</y>
+      <width>391</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>idrecherche</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>310</y>
+      <width>191</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: Red;
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+    </property>
+    <property name="text">
+     <string>Ajouter</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteButton">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>450</y>
+      <width>191</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: Red;
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="updateButton">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>380</y>
+      <width>191</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: Red;
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+    </property>
+    <property name="text">
+     <string>Update</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="rechercher">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>710</y>
+      <width>112</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>recherche</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="statistique">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>710</y>
+      <width>112</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>stat</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="trier">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>710</y>
+      <width>112</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>trier</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>-10</y>
+      <width>1181</width>
+      <height>811</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../4.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QTableView" name="tableView">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>160</y>
+      <width>631</width>
+      <height>281</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="idserv">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>130</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="typeserv">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>160</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="dureeserv">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>190</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="coutserv">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>220</y>
+      <width>113</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="etatsserv">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>250</y>
+      <width>111</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Annule</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>En cours</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Termine</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_5">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>130</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ID</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>160</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Type</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>190</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Duree</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>220</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cout</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_4">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>250</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Etat</string>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="graphicsView_salaire">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>440</y>
+      <width>631</width>
+      <height>251</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="conversionenpdf">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>520</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: Red;
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+    </property>
+    <property name="text">
+     <string>pdf</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="chat">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>650</y>
+      <width>181</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ChatBot</string>
+    </property>
+   </widget>
+   <zorder>label_2</zorder>
+   <zorder>idrech</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>deleteButton</zorder>
+   <zorder>updateButton</zorder>
+   <zorder>rechercher</zorder>
+   <zorder>statistique</zorder>
+   <zorder>trier</zorder>
+   <zorder>tableView</zorder>
+   <zorder>idserv</zorder>
+   <zorder>typeserv</zorder>
+   <zorder>dureeserv</zorder>
+   <zorder>coutserv</zorder>
+   <zorder>etatsserv</zorder>
+   <zorder>lineEdit_5</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>lineEdit_2</zorder>
+   <zorder>lineEdit_3</zorder>
+   <zorder>lineEdit_4</zorder>
+   <zorder>graphicsView_salaire</zorder>
+   <zorder>conversionenpdf</zorder>
+   <zorder>chat</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

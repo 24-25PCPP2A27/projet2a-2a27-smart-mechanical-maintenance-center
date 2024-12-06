@@ -20,7 +20,10 @@ SOURCES += \
     EmployeMain.cpp \
     MainRDV.cpp \
     RDV.cpp \
+    ServiceMain.cpp \
     arduino.cpp \
+    chatbot.cpp \
+    chatbotdialog.cpp \
     connection.cpp \
     employe.cpp \
     employeeprofiledialog.cpp \
@@ -28,26 +31,34 @@ SOURCES += \
     login.cpp \
     logviewer.cpp \
     main.cpp \
+    qcustomplot.cpp \
     qrcodedialog.cpp \
     qrcodegen.cpp \
+    service.cpp  # Remove the extra backslash
 
 HEADERS += \
     EmployeMain.h \
     MainRDV.h \
     RDV.h \
+    ServiceMain.h \
     arduino.h \
+    chatbot.h \
+    chatbotdialog.h \
     connection.h \
     employe.h \
     employeeprofiledialog.h \
     forgotpassworddialog.h \
     login.h \
     logviewer.h \
+    qcustomplot.h \
     qrcodedialog.h \
     qrcodegen.h \
-
+    service.h  # Remove the extra backslash
 FORMS += \
     EmployeMain.ui \
     MainRDV.ui \
+    ServiceMain.ui \
+    chatbotdialog.ui \
     employeeprofiledialog.ui \
     forgotpassworddialog.ui \
     login.ui \
