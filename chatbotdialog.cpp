@@ -11,27 +11,39 @@ ChatBotDialog::ChatBotDialog(Service *serviceManager, QWidget *parent)
     // Connect the send button to the chatbot logic
     connect(ui->sendButton, &QPushButton::clicked, this, &ChatBotDialog::onSendButtonClicked);
 
-    // Display the welcome message in the chat window
-    QString welcomeMessage = "Bonjour!\nTapez 'help' pour voir la liste des commandes disponibles.";
+    // Display a welcome message in the chat window
+    QString welcomeMessage =
+        "Bonjour ! Bienvenue au chatbot de gestion des services.\n"
+        "Tapez 'help' pour voir la liste des commandes disponibles.\n"
+        "Commandes disponibles:\n"
+        "- Add Service, ID, Type, Cost, Duration, Status\n"
+        "- Update Service\n"
+        "- Delete Service, ID\n"
+        "- List Services\n"
+        "- Export PDF";
     ui->chatDisplay->append(welcomeMessage);
-    ui->chatDisplay->setReadOnly(true);
+    ui->chatDisplay->setReadOnly(true); // Make the chat display read-only
 }
 
 ChatBotDialog::~ChatBotDialog()
 {
     delete ui;
-    delete chatbotInstance;  // Proper cleanup
+    delete chatbotInstance; // Ensure proper cleanup
 }
 
 void ChatBotDialog::onSendButtonClicked()
 {
-    QString userInput = ui->inputField->text();             // Get user input
-    QString response = chatbotInstance->getResponse(userInput); // Process chatbot response
+    QString userInput = ui->inputField->text().trimmed(); // Get and trim user input
+    if (userInput.isEmpty()) {
+        return; // Do nothing if input is empty
+    }
+
+    QString response = chatbotInstance->getResponse(userInput); // Get chatbot response
 
     // Display user input and chatbot response in the chat display
     ui->chatDisplay->append("User: " + userInput);
     ui->chatDisplay->append("Bot: " + response);
 
-    // Clear the input field
+    // Clear the input field after sending
     ui->inputField->clear();
 }

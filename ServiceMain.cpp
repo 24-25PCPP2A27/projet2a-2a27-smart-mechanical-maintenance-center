@@ -21,18 +21,19 @@
 #include "chatbotdialog.h"
 #include <QSqlError>
 
-Arduino arduino;
+
 ServiceMain::ServiceMain(QWidget *parent)
     : QMainWindow(parent) , ui(new Ui::ServiceMain) {
     ui->setupUi(this);
+    setupArduinoConnection();
+    connect(arduino.getserial(), &QSerialPort::readyRead, this, &ServiceMain::onArduinoDataReceived);
 
-     ui->tableView->setModel(tmpService.afficher());
+     afficherServices();  // Refresh the table view
 
        // Appeler la méthode pour charger les données au démarrage
        afficherServices();
        connect(ui->chat, &QPushButton::clicked, this, &ServiceMain::on_chat_clicked);
        // Connexion du bouton à la fonction de changement d'état
-       connect(ui->pushButton_2, &QPushButton::clicked, this, &ServiceMain::changerEtatEquipement);
 }
 
 ServiceMain::~ServiceMain() {
@@ -41,45 +42,51 @@ ServiceMain::~ServiceMain() {
 
 
 void ServiceMain::on_pushButton_clicked() {
+    // Get input values from the UI
+    int idserv = ui->idserv->text().toInt();  // ID input
+    QString type = ui->typeserv->text();      // Type input
+    QString duree = ui->dureeserv->text();    // Duration input
+    QString etats = ui->etatsserv->currentText();  // Status input
 
-        // Get input values from the UI
-        int idserv = ui->idserv->text().toInt(); // Assuming this is used for ID input
-        QString type = ui->typeserv->text();     // Assuming this is repurposed for TYPE input
-        QString duree = ui->dureeserv->text(); // Assuming this is repurposed for DUREE input
-        QString etats = ui->etatsserv->currentText(); // Assuming this is repurposed for ETATS input
-        double cout = ui->coutserv->text().toDouble(); // Assuming this is repurposed for COUT input
+    double cout = ui->coutserv->text().toDouble(); // Cost input
 
-        // Validate the input
-        if (idserv <= 0 || type.isEmpty() || duree.isEmpty() || etats.isEmpty() || cout <= 0.0) {
-            QMessageBox::warning(this, "Error", "Please fill in all fields with valid data.");
-            return;
-        }
+    // Validate the input
+    if (idserv <= 0 || type.isEmpty() || duree.isEmpty() || etats.isEmpty() || cout <= 0.0) {
+        QMessageBox::warning(this, "Error", "Please fill in all fields with valid data.");
+        return;
+    }
 
-        // Insert the data into the database
-        QSqlQuery query;
-        query.prepare("INSERT INTO Services (IDSERV, TYPE, DUREE, ETATS, COUT) "
-                      "VALUES (:idserv, :type, :duree, :etats, :cout)");
-        query.bindValue(":idserv", idserv);
-        query.bindValue(":type", type);
-        query.bindValue(":duree", duree);
-        query.bindValue(":etats", etats);
-        query.bindValue(":cout", cout);
+    // Ensure duree is a valid number
+    bool dureeValid;
+    double dureeValue = duree.toDouble(&dureeValid);
+    if (!dureeValid || dureeValue <= 0) {
+        QMessageBox::warning(this, "Error", "Please enter a valid duration.");
+        return;
+    }
 
-        if (query.exec()) {
-            QMessageBox::information(this, "Success", "Service added successfully!");
-             ui->tableView->setModel(tmpService.afficher());
-            // Clear fields after successful addition
-            ui->idserv->clear();
-            ui->typeserv->clear();
-            ui->dureeserv->clear();
-            ui->etatsserv->setCurrentIndex(0);
-            ui->coutserv->clear();
-        } else {
-            QMessageBox::warning(this, "Error", "Failed to add service. Check for duplicate ID or database errors.");
-            qDebug() << "Database Error: " << query.lastError().text();
-        }
+    // Create a Service object with the input data
+    Service service(idserv, cout, type, dureeValue, etats);
 
+    // Use the Service class's ajouter() method to add the service to the database
+    if (service.ajouter(idserv, type, duree, etats, cout)) {
+        QMessageBox::information(this, "Success", "Service added successfully!");
+
+        // Refresh the view with the updated data
+        ui->tableView->setModel(service.afficher());  // Refresh the table view
+        afficherServices();  // Refresh the table view
+        // Clear fields after successful addition
+        ui->idserv->clear();
+        ui->typeserv->clear();
+        ui->dureeserv->clear();
+        ui->etatsserv->setCurrentIndex(0);
+
+        ui->coutserv->clear();
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to add service. Check for duplicate ID or database errors.");
+    }
 }
+
+
 
 
 
@@ -235,7 +242,7 @@ void ServiceMain::on_updateButton_clicked() {
 
         // Prepare the query to update the service record
         QSqlQuery query;
-        query.prepare("UPDATE Services SET TYPE = :typeserv, DUREE = :dureeserv, ETATS = :etatsserv, COUT = :coutserv WHERE IDSERV = :idserv");
+        query.prepare("UPDATE Services SET TYPESERV = :typeserv, DUREESERV = :dureeserv, ETATSERV = :etatsserv, COUTSERV = :coutserv WHERE IDSERV = :idserv");
         query.bindValue(":typeserv", newType);
         query.bindValue(":dureeserv", newDuree);
         query.bindValue(":etatsserv", newEtats);
@@ -294,60 +301,92 @@ void ServiceMain::on_deleteButton_clicked() {
 
 
 
-void ServiceMain::afficherServices()
-{
+void ServiceMain::afficherServices() {
     QSqlTableModel *model = new QSqlTableModel(this);
     model->setTable("Services");
-    model->select();
+    model->select();  // This ensures the latest data is fetched from the database
 
     ui->tableView->setModel(model);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
+
 void ServiceMain::on_chat_clicked() {
     ChatBotDialog chatbotDialog(&tmpService, this); // Pass the Service object
         chatbotDialog.exec();
 }
 
-/*void ServiceMain::changerEtatEquipement()
+void ServiceMain::setupArduinoConnection()
 {
-    QString etatActuel = ui->etatsserv_2->currentText();
-    QString nouvelEtat;
+    // Attempt to connect to Arduino
+    int result = arduino.connect_arduino();
+    if (result == 0) {
+        qDebug() << "Arduino connected successfully on port:" << arduino.getarduino_port_name();
 
-    if (etatActuel == "en panne") {
-        nouvelEtat = "en service";
+        // Connect Arduino data reception to slot
+        connect(arduino.getserial(), &QSerialPort::readyRead, this, &ServiceMain::onArduinoDataReceived);
+    } else if (result == 1) {
+        qDebug() << "Failed to open Arduino serial port.";
     } else {
-        nouvelEtat = "en panne";
+        qDebug() << "Arduino not available.";
     }
-
-    // Changement de l'état dans l'interface utilisateur
-    ui->etatsserv_2->setCurrentText(nouvelEtat);
-
-    // Envoi de l'information à l'Arduino
-    QByteArray commande = nouvelEtat == "en service" ? "1" : "0"; // Exemple de commande (1 pour "en service", 0 pour "en panne")
-    arduino.write_to_arduino(commande);
 }
-*/
-void ServiceMain::changerEtatEquipement()
+void ServiceMain::onArduinoDataReceived()
 {
-    QString etatActuel = ui->etatsserv_2->currentText();
-    QString nouvelEtat;
+    // Read the data from Arduino
+    QByteArray data = arduino.read_from_arduino().trimmed();
 
-    // Détermination du nouvel état
-    if (etatActuel == "en panne") {
-        nouvelEtat = "en service";
-    } else {
-        nouvelEtat = "en panne";
+    // Debug log to verify received data
+    qDebug() << "Received data from Arduino:" << data;
+
+    // Check if the received data matches "1"
+    if (data == "1") {
+        // Get the ID from the input field
+        int idserv = ui->idserv->text().toInt();
+
+        // Validate the input ID
+        if (idserv <= 0) {
+            QMessageBox::warning(this, "Error", "Please enter a valid ID before using Arduino.");
+            return;
+        }
+
+        // Query the current state of the equipment
+        QSqlQuery query;
+        query.prepare("SELECT ETAT FROM GESTION_EQUIPEMENTS WHERE ID = :idserv");
+        query.bindValue(":idserv", idserv);
+
+        if (query.exec()) {
+            if (query.next()) {
+                // Fetch the current state
+                QString currentState = query.value("ETAT").toString();
+                qDebug() << "Current state of equipment:" << currentState;
+
+                // Determine the new state
+                QString newState = (currentState == "en service") ? "en panne" : "en service";
+
+                // Update the state in the database
+                QSqlQuery updateQuery;
+                updateQuery.prepare("UPDATE GESTION_EQUIPEMENTS SET ETAT = :newState WHERE ID = :idserv");
+                updateQuery.bindValue(":newState", newState);
+                updateQuery.bindValue(":idserv", idserv);
+
+                if (updateQuery.exec()) {
+                    QMessageBox::information(this, "Success",
+                        QString("State updated successfully to '%1'.").arg(newState));
+                } else {
+                    QMessageBox::warning(this, "Database Error",
+                        "Failed to update the state. Please try again.");
+                    qDebug() << "Update error:" << updateQuery.lastError().text();
+                }
+            } else {
+                QMessageBox::warning(this, "Error",
+                    "No equipment found with the specified ID.");
+            }
+        } else {
+            QMessageBox::warning(this, "Database Error",
+                "Failed to query the database. Please check your connection.");
+            qDebug() << "Query error:" << query.lastError().text();
+        }
     }
-
-    // Mise à jour de l'état dans l'interface
-    ui->etatsserv_2->setCurrentText(nouvelEtat);
-
-    // Mise à jour de l'état dans l'objet Service
-    service.setEtatEquipement(nouvelEtat);
-
-    // Envoi de la commande à Arduino
-    QByteArray commande = nouvelEtat == "en service" ? "1" : "0";
-    arduino.write_to_arduino(commande);
 }

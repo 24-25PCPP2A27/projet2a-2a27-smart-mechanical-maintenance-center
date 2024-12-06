@@ -1,4 +1,4 @@
-/*#ifndef ARDUINO_H
+#ifndef ARDUINO_H
 #define ARDUINO_H
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
@@ -26,34 +26,5 @@ QByteArray data;  // contenant les données lues à partir d'Arduino
 };
 
 
-
-#endif // ARDUINO_H
-*/
-#ifndef ARDUINO_H
-#define ARDUINO_H
-
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
-#include <QDebug>
-
-class Arduino
-{
-public:
-    Arduino();                          // Constructor
-    int connect_arduino();              // Connect to Arduino
-    int close_arduino();                // Close the connection
-    void write_to_arduino(QByteArray);  // Send data to Arduino
-    QByteArray read_from_arduino();      // Receive data from Arduino
-    QSerialPort* getserial();           // Accessor for the serial object
-    QString getarduino_port_name();     // Accessor for the Arduino port name
-
-private:
-    QSerialPort *serial;                // Serial port object
-    static const quint16 arduino_uno_vendor_id = 9025;
-    static const quint16 arduino_uno_producy_id = 67;
-    QString arduino_port_name;          // Port name for Arduino
-    bool arduino_is_available;          // Status of Arduino availability
-    QByteArray data;                    // Data buffer for reading from Arduino
-};
 
 #endif // ARDUINO_H

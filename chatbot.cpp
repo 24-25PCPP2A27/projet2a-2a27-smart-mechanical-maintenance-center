@@ -1,14 +1,14 @@
-/*
 #include "chatbot.h"
 #include "service.h"
 #include <QDebug>
 #include <QTextStream>
 #include <QPdfWriter>
 #include <QPainter>
-#include <QSqlQuery>
 #include <QSqlQueryModel>
-#include <QSqlError>
 #include <QSqlRecord>
+#include <QStringList>
+#include <QFileDialog>
+#include <QTextDocument>
 ChatBot::ChatBot(QObject *parent)
     : QObject(parent)
 {
@@ -19,70 +19,166 @@ QString ChatBot::getResponse(const QString &input)
     QString response;
 
     if (input.toLower().contains("add service")) {
-        response = "To add a service, provide the following details: ID, Type, Cost, Duration, and Status.";
-    } else if (input.toLower().contains("update service")) {
-        response = "To update a service, provide the ID of the service you want to modify and the new details.";
+        response = handleAddService(input);
     } else if (input.toLower().contains("delete service")) {
-        response = "To delete a service, provide the ID of the service you want to remove.";
+        response = handleDeleteService(input);
     } else if (input.toLower().contains("export pdf")) {
-        response = "Exporting services to PDF. Please wait...";
-        if (exportToPDF()) {
-            response += "\nServices exported successfully to services.pdf.";
-        } else {
-            response += "\nFailed to export services to PDF.";
-        }
+        response = handleExportToPDF();
     } else if (input.toLower().contains("list services")) {
-        response = listServices();
+        response = handleListServices();
     } else {
-        response = "I didn't understand that. You can ask me about adding, updating, deleting services, or exporting them to PDF.";
+        response = "Command not recognized. Try:\n"
+                   "- Add Service, ID, Type, Cost, Duration, Status\n"
+                   "- Delete Service, ID\n"
+                   "- List Services\n"
+                   "- Export PDF";
     }
 
     return response;
 }
 
-bool ChatBot::exportToPDF()
+QString ChatBot::handleAddService(const QString &input)
 {
-    QPdfWriter pdfWriter("services.pdf");
-    QPainter painter(&pdfWriter);
-
-    if (!painter.isActive()) {
-        qDebug() << "Failed to open PDF writer.";
-        return false;
+    // Check if the input starts with "Add Service" followed by a comma
+    if (!input.toLower().startsWith("add service,")) {
+        return "Invalid format. Use: Add Service, ID, Type, Cost, Duration, Status.";
     }
 
+    // Remove the "Add Service," part from the input string (including the comma)
+    QString cleanedInput = input.mid(12).trimmed(); // Remove "Add Service, " part (length 12)
+
+    // Now split the rest of the input by commas and skip empty parts
+    QStringList details = cleanedInput.split(",", QString::SkipEmptyParts);
+    for (auto &detail : details) {
+        detail = detail.trimmed(); // Trim extra spaces around each parameter
+    }
+
+    if (details.size() != 5) { // Expect exactly 5 parameters (ID, Type, Cost, Duration, Status)
+        return QString("Incorrect number of parameters. Provided: %1. Expected: 5.")
+                .arg(details.size());
+    }
+
+    bool idOk, costOk, durationOk;
+    int id = details[0].toInt(&idOk);
+    QString type = details[1];
+    double cost = details[2].toDouble(&costOk);
+    double duration = details[3].toDouble(&durationOk);
+    QString status = details[4].toLower();
+
+    if (!idOk || !costOk || !durationOk) {
+        return "Failed to parse ID, Cost, or Duration. Please ensure they are valid numbers.";
+    }
+
+    // Validate status
+    QStringList validStatuses = {"en cours", "terminée", "annulé"};
+    if (!validStatuses.contains(status)) {
+        return "Invalid status. Please choose from: en cours, terminée, annulé.";
+    }
+
+    // Create service object
+    Service service(id, cost, type, duration, status);
+
+    // Try to add the service
+    if (service.ajouter(id, type, QString::number(duration), status, cost)) {
+        return "Service added successfully.";
+    } else {
+        return "Failed to add service. Please verify the details.";
+    }
+}
+
+
+
+
+
+QString ChatBot::handleDeleteService(const QString &input)
+{
+    if (!input.contains(",")) {
+        return "Invalid format. Use: Delete Service, ID.";
+    }
+
+    QStringList details = input.split(",");
+    if (details.size() != 2) {
+        return "Incorrect format. Provide only: Delete Service, ID.";
+    }
+
+    bool idOk;
+    int id = details[1].trimmed().toInt(&idOk);
+
+    if (!idOk) {
+        return "Invalid ID. Please ensure the ID is a number.";
+    }
+
+    Service service;
+    if (service.supprimer(id)) {
+        return "Service deleted successfully.";
+    } else {
+        return "Failed to delete service. Please ensure the ID exists.";
+    }
+}
+
+QString ChatBot::handleExportToPDF()
+{
+    // Open a file dialog to choose location and filename
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Save PDF", "", "PDF Files (*.pdf)");
+
+    // If the user cancels the dialog, return without saving
+    if (fileName.isEmpty()) {
+        return "Export canceled.";
+    }
+
+    // Ensure the file has a .pdf extension
+    if (!fileName.endsWith(".pdf")) {
+        fileName += ".pdf";
+    }
+
+    // Create HTML table structure
+    QString htmlContent = "<html><head><style>"
+                          "table {border-collapse: collapse; width: 100%;}"
+                          "th, td {border: 1px solid black; padding: 8px; text-align: left;}"
+                          "</style></head><body>"
+                          "<h1>Service List</h1>"
+                          "<table>"
+                          "<tr><th>ID</th><th>Type</th><th>Cost</th><th>Duration</th><th>Status</th><th>Equipment State</th></tr>";
+
+    // Fetch the data
     Service service;
     QSqlQueryModel *model = service.afficher();
 
     if (!model || model->rowCount() == 0) {
-        qDebug() << "No services found to export.";
-        return false;
+        return "No services found to export.";
     }
 
-    int y = 100;
-    painter.setFont(QFont("Arial", 12));
-    painter.drawText(50, y, "ID");
-    painter.drawText(150, y, "Type");
-    painter.drawText(250, y, "Cost");
-    painter.drawText(350, y, "Duration");
-    painter.drawText(450, y, "Status");
-
-    y += 50;
-
+    // Loop through the rows and add them to the HTML table
     for (int i = 0; i < model->rowCount(); ++i) {
         QSqlRecord record = model->record(i);
-        painter.drawText(50, y, record.value("idserv").toString());
-        painter.drawText(150, y, record.value("type").toString());
-        painter.drawText(250, y, record.value("cout").toString());
-        painter.drawText(350, y, record.value("duree").toString());
-        painter.drawText(450, y, record.value("etats").toString());
-        y += 50;
+        htmlContent += "<tr>"
+                       "<td>" + record.value("idserv").toString() + "</td>"
+                       "<td>" + record.value("typeserv").toString() + "</td>"
+                       "<td>" + record.value("coutserv").toString() + "</td>"
+                       "<td>" + record.value("dureeserv").toString() + "</td>"
+                       "<td>" + record.value("etatsserv").toString() + "</td>"
+                       "<td>" + record.value("etat").toString() + "</td>"
+                       "</tr>";
     }
 
-    painter.end();
-    return true;
+    // Close the table and HTML tags
+    htmlContent += "</table></body></html>";
+
+    // Create a QTextDocument to convert HTML to PDF
+    QTextDocument document;
+    document.setHtml(htmlContent);
+
+    // Create PDF writer
+    QPdfWriter pdfWriter(fileName);
+    pdfWriter.setPageSize(QPagedPaintDevice::A4);
+
+    // Now, pass QPdfWriter directly to QTextDocument::print()
+    document.print(&pdfWriter);
+
+    return "Services exported successfully to " + fileName;
 }
 
-QString ChatBot::listServices()
+QString ChatBot::handleListServices()
 {
     Service service;
     QSqlQueryModel *model = service.afficher();
@@ -94,288 +190,16 @@ QString ChatBot::listServices()
     QString result;
     QTextStream stream(&result);
 
-    stream << "ID\tType\tCost\tDuration\tStatus\n";
+    stream << "ID\tType\tCost\tDuration\tStatus\tEquipment State\n";
 
     for (int i = 0; i < model->rowCount(); ++i) {
         QSqlRecord record = model->record(i);
         stream << record.value("idserv").toString() << "\t"
-               << record.value("type").toString() << "\t"
-               << record.value("cout").toString() << "\t"
-               << record.value("duree").toString() << "\t"
-               << record.value("etats").toString() << "\n";
-    }
-
-    return result;
-}
-*/
-/*#include "chatbot.h"
-#include "service.h"
-#include <QDebug>
-#include <QTextStream>
-#include <QPdfWriter>
-#include <QPainter>
-#include <QSqlQuery>
-#include <QSqlQueryModel>
-#include <QSqlError>
-#include <QSqlRecord>
-
-ChatBot::ChatBot(QObject *parent)
-    : QObject(parent)
-{
-}
-
-QString ChatBot::getResponse(const QString &input)
-{
-    QString response;
-
-    if (input.toLower().contains("add service")) {
-        response = "To add a service, provide the following details: ID, Type, Cost, Duration, and Status.";
-        if (input.contains(",")) {
-            QStringList details = input.split(",");
-            if (details.size() == 5) {
-                bool idOk;
-                int id = details[0].split(" ").last().trimmed().toInt(&idOk);
-
-                QString type = details[1].trimmed();
-                bool costOk;
-                double cost = details[2].trimmed().toDouble(&costOk);
-                bool durationOk;
-                double duration = details[3].trimmed().toDouble(&durationOk);
-                QString status = details[4].trimmed();
-
-                if (idOk && costOk && durationOk) {
-                    // Create a Service instance with the provided details
-                    Service service(id, cost, type, duration, status, "en panne"); // Default state for equipment
-
-                    if (Service.ajouter(id, type, QString::number(duration), status, cost, "en panne")) {
-                        response = "Service added successfully.";
-                    } else {
-                        response = "Failed to add service. Please check the details.";
-                    }
-                } else {
-                    response = "Failed to convert some details to the correct types.";
-                }
-            } else {
-                response += "\nIncorrect number of details provided. Format: ID, Type, Cost, Duration, Status.";
-            }
-        }
-    } else if (input.toLower().contains("update service")) {
-        response = "To update a service, provide the ID of the service you want to modify and the new details.";
-    } else if (input.toLower().contains("delete service")) {
-        response = "To delete a service, provide the ID of the service you want to remove.";
-    } else if (input.toLower().contains("export pdf")) {
-        response = "Exporting services to PDF. Please wait...";
-        if (exportToPDF()) {
-            response += "\nServices exported successfully to services.pdf.";
-        } else {
-            response += "\nFailed to export services to PDF.";
-        }
-    } else if (input.toLower().contains("list services")) {
-        response = listServices();
-    } else {
-        response = "I didn't understand that. You can ask me about adding, updating, deleting services, or exporting them to PDF.";
-    }
-
-    return response;
-}
-
-bool ChatBot::exportToPDF()
-{
-    QPdfWriter pdfWriter("services.pdf");
-    QPainter painter(&pdfWriter);
-
-    if (!painter.isActive()) {
-        qDebug() << "Failed to open PDF writer.";
-        return false;
-    }
-
-    Service service;
-    QSqlQueryModel *model = service.afficher();
-
-    if (!model || model->rowCount() == 0) {
-        qDebug() << "No services found to export.";
-        return false;
-    }
-
-    int y = 100;
-    painter.setFont(QFont("Arial", 12));
-    painter.drawText(50, y, "ID");
-    painter.drawText(150, y, "Type");
-    painter.drawText(250, y, "Cost");
-    painter.drawText(350, y, "Duration");
-    painter.drawText(450, y, "Status");
-
-    y += 50;
-
-    for (int i = 0; i < model->rowCount(); ++i) {
-        QSqlRecord record = model->record(i);
-        painter.drawText(50, y, record.value("idserv").toString());
-        painter.drawText(150, y, record.value("type").toString());
-        painter.drawText(250, y, record.value("cout").toString());
-        painter.drawText(350, y, record.value("duree").toString());
-        painter.drawText(450, y, record.value("etats").toString());
-        y += 50;
-    }
-
-    painter.end();
-    return true;
-}
-
-QString ChatBot::listServices()
-{
-    Service service;
-    QSqlQueryModel *model = service.afficher();
-
-    if (!model || model->rowCount() == 0) {
-        return "No services found.";
-    }
-
-    QString result;
-    QTextStream stream(&result);
-
-    stream << "ID\tType\tCost\tDuration\tStatus\n";
-
-    for (int i = 0; i < model->rowCount(); ++i) {
-        QSqlRecord record = model->record(i);
-        stream << record.value("idserv").toString() << "\t"
-               << record.value("type").toString() << "\t"
-               << record.value("cout").toString() << "\t"
-               << record.value("duree").toString() << "\t"
-               << record.value("etats").toString() << "\n";
-    }
-
-    return result;
-}
-*/
-#include "chatbot.h"
-#include "service.h"
-#include <QDebug>
-#include <QTextStream>
-#include <QPdfWriter>
-#include <QPainter>
-#include <QSqlQuery>
-#include <QSqlQueryModel>
-#include <QSqlError>
-#include <QSqlRecord>
-
-ChatBot::ChatBot(QObject *parent)
-    : QObject(parent)
-{
-}
-
-QString ChatBot::getResponse(const QString &input)
-{
-    QString response;
-
-    if (input.toLower().contains("add service")) {
-        response = "To add a service, provide the following details: ID, Type, Cost, Duration, and Status.";
-        if (input.contains(",")) {
-            QStringList details = input.split(",");
-            if (details.size() == 5) {
-                bool idOk, costOk, durationOk;
-                int id = details[0].split(" ").last().trimmed().toInt(&idOk);
-                QString type = details[1].trimmed();
-                double cost = details[2].trimmed().toDouble(&costOk);
-                double duration = details[3].trimmed().toDouble(&durationOk);
-                QString status = details[4].trimmed();
-
-                if (idOk && costOk && durationOk) {
-                    Service service(id, cost, type, duration, status, "en panne"); // Default state for equipment
-                    if (service.ajouter(id, type, QString::number(duration), status, cost)) {
-                        response = "Service added successfully.";
-                    } else {
-                        response = "Failed to add service. Please check the details.";
-                    }
-                } else {
-                    response = "Failed to convert some details to the correct types.";
-                }
-            } else {
-                response += "\nIncorrect number of details provided. Format: ID, Type, Cost, Duration, Status.";
-            }
-        }
-    } else if (input.toLower().contains("update service")) {
-        response = "To update a service, provide the ID of the service you want to modify and the new details.";
-    } else if (input.toLower().contains("delete service")) {
-        response = "To delete a service, provide the ID of the service you want to remove.";
-    } else if (input.toLower().contains("export pdf")) {
-        response = "Exporting services to PDF. Please wait...";
-        if (exportToPDF()) {
-            response += "\nServices exported successfully to services.pdf.";
-        } else {
-            response += "\nFailed to export services to PDF.";
-        }
-    } else if (input.toLower().contains("list services")) {
-        response = listServices();
-    } else {
-        response = "I didn't understand that. You can ask me about adding, updating, deleting services, or exporting them to PDF.";
-    }
-
-    return response;
-}
-
-bool ChatBot::exportToPDF()
-{
-    QPdfWriter pdfWriter("services.pdf");
-    QPainter painter(&pdfWriter);
-
-    if (!painter.isActive()) {
-        qDebug() << "Failed to open PDF writer.";
-        return false;
-    }
-
-    Service service;
-    QSqlQueryModel *model = service.afficher();
-
-    if (!model || model->rowCount() == 0) {
-        qDebug() << "No services found to export.";
-        return false;
-    }
-
-    int y = 100;
-    painter.setFont(QFont("Arial", 12));
-    painter.drawText(50, y, "ID");
-    painter.drawText(150, y, "Type");
-    painter.drawText(250, y, "Cost");
-    painter.drawText(350, y, "Duration");
-    painter.drawText(450, y, "Status");
-
-    y += 50;
-
-    for (int i = 0; i < model->rowCount(); ++i) {
-        QSqlRecord record = model->record(i);
-        painter.drawText(50, y, record.value("idserv").toString());
-        painter.drawText(150, y, record.value("type").toString());
-        painter.drawText(250, y, record.value("cout").toString());
-        painter.drawText(350, y, record.value("duree").toString());
-        painter.drawText(450, y, record.value("etats").toString());
-        y += 50;
-    }
-
-    painter.end();
-    return true;
-}
-
-QString ChatBot::listServices()
-{
-    Service service;
-    QSqlQueryModel *model = service.afficher();
-
-    if (!model || model->rowCount() == 0) {
-        return "No services found.";
-    }
-
-    QString result;
-    QTextStream stream(&result);
-
-    stream << "ID\tType\tCost\tDuration\tStatus\n";
-
-    for (int i = 0; i < model->rowCount(); ++i) {
-        QSqlRecord record = model->record(i);
-        stream << record.value("idserv").toString() << "\t"
-               << record.value("type").toString() << "\t"
-               << record.value("cout").toString() << "\t"
-               << record.value("duree").toString() << "\t"
-               << record.value("etats").toString() << "\n";
+               << record.value("typeserv").toString() << "\t"
+               << record.value("coutserv").toString() << "\t"
+               << record.value("dureeserv").toString() << "\t"
+               << record.value("etatsserv").toString() << "\t"
+               << record.value("etat").toString() << "\n";
     }
 
     return result;
