@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>login</class>
+ <widget class="QWidget" name="login">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1112</width>
+    <height>780</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>-560</x>
+     <y>-150</y>
+     <width>1671</width>
+     <height>901</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>F:/Qt projet/Employee/1.jpg</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_login">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>600</y>
+     <width>681</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Style for the entire QPushButton */
+QPushButton {
+    background-color: White;  /* Tomato red background */
+    border: 2px solid #FF4500;  /* Slightly darker red border */
+    border-radius: 15px;        /* Rounded corners */
+    color: black;               /* White text color */
+    font-size: 16px;            /* Font size */
+    padding: 10px 20px;         /* Padding around text */
+    min-width: 150px;           /* Minimum width of button */          /* Maximum width of button */
+    text-align: center;         /* Center the text */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+/* Hover effect */
+QPushButton:hover {
+    background-color: #FF4500;  /* Darker red when hovered */
+    transform: scale(1.05);      /* Slightly grow the button */
+}
+
+/* Pressed effect */
+QPushButton:pressed {
+    background-color: #FF0000;  /* Bright red when pressed */
+    transform: scale(0.98);      /* Slightly shrink the button */
+}
+
+/* Focus effect */
+QPushButton:focus {
+    outline: none;  /* Remove the focus outline */
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Login</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_username">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>270</y>
+     <width>681</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Style for the QLineEdit */
+QLineEdit {
+    background-color: #FFFFFF;  /* White background */
+    border: 2px solid #FF4500;  /* Orange border */
+    border-radius: 12px;        /* Rounded corners */
+    padding: 10px;              /* Padding inside the text field */
+    font-size: 16px;            /* Font size */
+    color: #333333;             /* Text color */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+/* Focus effect for QLineEdit */
+QLineEdit:focus {
+    border: 2px solid #FF6347;  /* Tomato red border when focused */
+    background-color: #FFF8F0;  /* Light background on focus */
+}
+
+/* Placeholder text style */
+QLineEdit::placeholder {
+    color: #B0B0B0;  /* Light grey color for placeholder */
+    font-style: italic;  /* Italicized placeholder text */
+}
+</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_password">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>390</y>
+     <width>681</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Style for the QLineEdit */
+QLineEdit {
+    background-color: #FFFFFF;  /* White background */
+    border: 2px solid #FF4500;  /* Orange border */
+    border-radius: 12px;        /* Rounded corners */
+    padding: 10px;              /* Padding inside the text field */
+    font-size: 16px;            /* Font size */
+    color: #333333;             /* Text color */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+/* Focus effect for QLineEdit */
+QLineEdit:focus {
+    border: 2px solid #FF6347;  /* Tomato red border when focused */
+    background-color: #FFF8F0;  /* Light background on focus */
+}
+
+/* Placeholder text style */
+QLineEdit::placeholder {
+    color: #B0B0B0;  /* Light grey color for placeholder */
+    font-style: italic;  /* Italicized placeholder text */
+}
+</string>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_forgotPassword">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>512</y>
+     <width>211</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Style for the entire QPushButton */
+QPushButton {
+    background-color: White;  /* Tomato red background */
+    border: 2px solid #FF4500;  /* Slightly darker red border */
+    border-radius: 15px;        /* Rounded corners */
+    color: black;               /* White text color */
+    font-size: 16px;            /* Font size */
+    padding: 10px 20px;         /* Padding around text */
+    min-width: 150px;           /* Minimum width of button */
+    max-width: 390px;           /* Maximum width of button */
+    text-align: center;         /* Center the text */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+/* Hover effect */
+QPushButton:hover {
+    background-color: #FF4500;  /* Darker red when hovered */
+    transform: scale(1.05);      /* Slightly grow the button */
+}
+
+/* Pressed effect */
+QPushButton:pressed {
+    background-color: #FF0000;  /* Bright red when pressed */
+    transform: scale(0.98);      /* Slightly shrink the button */
+}
+
+/* Focus effect */
+QPushButton:focus {
+    outline: none;  /* Remove the focus outline */
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Mot de Passe Oublié</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelStatus">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>710</y>
+     <width>301</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: blue; 
+font-size: 14px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

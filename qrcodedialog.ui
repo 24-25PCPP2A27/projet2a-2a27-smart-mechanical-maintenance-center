@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QRCodeDialog</class>
+ <widget class="QDialog" name="QRCodeDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>838</width>
+    <height>685</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="pushButton_generate">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>570</y>
+     <width>221</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	font: 16pt &quot;MS Shell Dlg 2&quot;;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px solid rgb(255, 0, 0); 
+    border-radius: 20px; 
+    padding: 10px; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+QPushButton:hover {
+    background-color: rgb(255, 0, 0);
+    color: black;
+    border: 4px solid rgb(255, 255, 255); 
+    outline: none; 
+}</string>
+   </property>
+   <property name="text">
+    <string>Genèrer QR</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_ID">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>20</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>20</y>
+     <width>47</width>
+     <height>14</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>id</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_QRCode">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>113</y>
+     <width>421</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    background-color: white;
+   
+
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
