@@ -13,7 +13,10 @@
 #include "EmployeMain.h"
 #include "MainRDV.h"
 #include "ServiceMain.h"
+<<<<<<< HEAD
 #include "EquipMain.h"
+=======
+>>>>>>> 36a7267668d4c9d3fab1507a21c81fb9ced4f56f
 
 
 // Constructor
@@ -91,12 +94,21 @@ void Login::on_pushButton_login_clicked()
         }
         else if (poste == "ResponsableServices") {
             ServiceMain  *serviceMain = new ServiceMain();
+<<<<<<< HEAD
             serviceMain->setWindowTitle("Service Panel");
             serviceMain->show();
         } else if(poste == "ResponsableEquipment") {
             EquipMain *equipMain = new EquipMain();
             equipMain->setWindowTitle("Equipement Panel");
             equipMain->show();
+=======
+            serviceMain->setWindowTitle("Technician Panel");
+            serviceMain->show();
+        } else {
+            EmployeMain *employeMain = new EmployeMain();
+            employeMain->setWindowTitle("Employee Panel");
+            employeMain->show();
+>>>>>>> 36a7267668d4c9d3fab1507a21c81fb9ced4f56f
         }
 
 
@@ -202,11 +214,19 @@ void Login::handleRFIDInput() {
                           ServiceMain  *serviceMain = new ServiceMain();
                           serviceMain->setWindowTitle("Technician Panel");
                           serviceMain->show();
+<<<<<<< HEAD
                     } else if (poste == "ResponsableVehicule") {
                         EquipMain *equipMain = new EquipMain();
                         equipMain->setWindowTitle("Equipement Panel");
                         equipMain->show();
                     } /*else if (poste == "ResponsableEquipement" {
+=======
+                    }/* else if (poste == "ResponsableVehicule") {
+                        TechnicianMain *technicianMain = new TechnicianMain();
+                        technicianMain->setWindowTitle("Technician Panel");
+                        technicianMain->show();
+                    } else if (poste == "ResponsableEquipement" {
+>>>>>>> 36a7267668d4c9d3fab1507a21c81fb9ced4f56f
                         EmployeMain *employeMain = new EmployeMain();
                         employeMain->setWindowTitle("Employee Panel");
                         employeMain->show();
