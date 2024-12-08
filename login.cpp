@@ -12,6 +12,8 @@
 #include "employeeprofiledialog.h"
 #include "EmployeMain.h"
 #include "MainRDV.h"
+#include "ServiceMain.h"
+#include "EquipMain.h"
 
 
 // Constructor
@@ -87,18 +89,16 @@ void Login::on_pushButton_login_clicked()
             RDVwindow->setWindowTitle("Rendez Vous");
             RDVwindow->show();
         }
-        /*else if (poste == "ResponsableService") {
-            TechnicianMain *technicianMain = new TechnicianMain();
-            technicianMain->setWindowTitle("Technician Panel");
-            technicianMain->show();
-        } else {
-            EmployeMain *employeMain = new EmployeMain();
-            employeMain->setWindowTitle("Employee Panel");
-            employeMain->show();
+        else if (poste == "ResponsableServices") {
+            ServiceMain  *serviceMain = new ServiceMain();
+            serviceMain->setWindowTitle("Service Panel");
+            serviceMain->show();
+        } else if(poste == "ResponsableEquipment") {
+            EquipMain *equipMain = new EquipMain();
+            equipMain->setWindowTitle("Equipement Panel");
+            equipMain->show();
         }
-        */
 
-        // Temporary: All users go to EmployeMain
 
         this->close();  // Close the login dialog
     } else {
@@ -198,25 +198,21 @@ void Login::handleRFIDInput() {
                         MainRDV *mainRDV = new MainRDV();
                         mainRDV ->setWindowTitle("Admin Panel");
                         mainRDV ->show();
-                    /*} else if (poste == "ResponsableService") {
-                        TechnicianMain *technicianMain = new TechnicianMain();
-                        technicianMain->setWindowTitle("Technician Panel");
-                        technicianMain->show();
+                    } else if (poste == "ResponsableService") {
+                          ServiceMain  *serviceMain = new ServiceMain();
+                          serviceMain->setWindowTitle("Technician Panel");
+                          serviceMain->show();
                     } else if (poste == "ResponsableVehicule") {
-                        TechnicianMain *technicianMain = new TechnicianMain();
-                        technicianMain->setWindowTitle("Technician Panel");
-                        technicianMain->show();
-                    } else if (poste == "ResponsableEquipement" {
+                        EquipMain *equipMain = new EquipMain();
+                        equipMain->setWindowTitle("Equipement Panel");
+                        equipMain->show();
+                    } /*else if (poste == "ResponsableEquipement" {
                         EmployeMain *employeMain = new EmployeMain();
                         employeMain->setWindowTitle("Employee Panel");
                         employeMain->show();
                     }
                     */
 
-                    // Temporary: All users go to EmployeMain
-                    EmployeMain *employeMain = new EmployeMain();
-                    employeMain->setWindowTitle("Employee Management");
-                    employeMain->show();
 
                     this->close();  // Close the login dialog
                     return; // Exit the function after handling
@@ -244,4 +240,4 @@ void Login::handleRFIDInput() {
         ui->labelStatus->setText("Please scan your card...");
     }
 }
-}
+

@@ -17,37 +17,67 @@ DEFINES += QT_NO_QML_DEBUG
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ../vehiculeee/VehiMain.cpp \
+    ../vehiculeee/qrcodedialog.cpp \
+    ../vehiculeee/statistique.cpp \
+    ../vehiculeee/vehicule.cpp \
+    ../vehiculeee/vehiculeui.cpp \
     EmployeMain.cpp \
+    EquipMain.cpp \
     MainRDV.cpp \
     RDV.cpp \
+    ServiceMain.cpp \
     arduino.cpp \
+    chatbot.cpp \
+    chatbotdialog.cpp \
     connection.cpp \
     employe.cpp \
     employeeprofiledialog.cpp \
+    equipements.cpp \
     forgotpassworddialog.cpp \
     login.cpp \
     logviewer.cpp \
     main.cpp \
+    qcustomplot.cpp \
     qrcodedialog.cpp \
     qrcodegen.cpp \
+    service.cpp  # Remove the extra backslash
 
 HEADERS += \
+    ../vehiculeee/VehiMain.h \
+    ../vehiculeee/qrcodedialog.h \
+    ../vehiculeee/statistique.h \
+    ../vehiculeee/vehicule.h \
+    ../vehiculeee/vehiculeui.h \
     EmployeMain.h \
+    EquipMain.h \
+    ImageDelegate.h \
     MainRDV.h \
     RDV.h \
+    ServiceMain.h \
     arduino.h \
+    chatbot.h \
+    chatbotdialog.h \
     connection.h \
     employe.h \
     employeeprofiledialog.h \
+    equipements.h \
     forgotpassworddialog.h \
     login.h \
     logviewer.h \
+    qcustomplot.h \
     qrcodedialog.h \
     qrcodegen.h \
-
+    service.h  # Remove the extra backslash
 FORMS += \
+    ../vehiculeee/VehiMain.ui \
+    ../vehiculeee/statistique.ui \
+    ../vehiculeee/vehiculeui.ui \
     EmployeMain.ui \
+    EquipMain.ui \
     MainRDV.ui \
+    ServiceMain.ui \
+    chatbotdialog.ui \
     employeeprofiledialog.ui \
     forgotpassworddialog.ui \
     login.ui \
