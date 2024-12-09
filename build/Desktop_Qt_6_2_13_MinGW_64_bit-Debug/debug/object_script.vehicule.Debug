@@ -1,0 +1,12 @@
+debug/connexion.o
+debug/main.o
+debug/mainwindow.o
+debug/qrcodedialog.o
+debug/statistique.o
+debug/vehicule.o
+debug/vehiculeui.o
+debug/qrcodegen.o
+debug/moc_mainwindow.o
+debug/moc_qrcodedialog.o
+debug/moc_statistique.o
+debug/moc_vehiculeui.o

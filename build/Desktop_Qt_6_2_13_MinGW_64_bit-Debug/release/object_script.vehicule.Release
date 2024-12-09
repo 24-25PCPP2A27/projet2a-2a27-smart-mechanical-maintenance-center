@@ -1,0 +1,12 @@
+release/connexion.o
+release/main.o
+release/mainwindow.o
+release/qrcodedialog.o
+release/statistique.o
+release/vehicule.o
+release/vehiculeui.o
+release/qrcodegen.o
+release/moc_mainwindow.o
+release/moc_qrcodedialog.o
+release/moc_statistique.o
+release/moc_vehiculeui.o

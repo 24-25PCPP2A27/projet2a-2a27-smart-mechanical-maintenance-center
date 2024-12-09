@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>vehiculeUI</class>
+ <widget class="QDialog" name="vehiculeUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>906</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>500</y>
+     <width>811</width>
+     <height>291</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>500</y>
+     <width>171</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLineEdit" name="nums">
+      <property name="placeholderText">
+       <string>nums</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="numc">
+      <property name="placeholderText">
+       <string>numc</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QDateEdit" name="dateEdit"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="km">
+      <property name="placeholderText">
+       <string>km</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="tel">
+      <property name="placeholderText">
+       <string>tel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="modele">
+      <property name="placeholderText">
+       <string>modele</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="marque">
+      <property name="placeholderText">
+       <string>marque</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="nom">
+      <property name="placeholderText">
+       <string>nom</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_rech">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>340</y>
+     <width>113</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox_rech">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>340</y>
+     <width>91</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>Numero de chassis</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Numéro du véhicule</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Model</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="pushButton_rech">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>340</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Recherche</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>270</y>
+     <width>70</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Tri</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox_tri">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>260</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>Kilométrage croissants</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Kilométrage decroissants</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Numéro du véhicule decroissants</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Numéro du véhicule croissants</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Date d'entrée decroissants</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Date d'entrée croissants</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="pushButton_stat">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>180</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Statistique</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_qrcode">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>220</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>QrCode</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>310</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PDF</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_pdf">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>300</y>
+     <width>113</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_pdf">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>300</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>1170</x>
+     <y>450</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="V_ID">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>430</y>
+     <width>161</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Verif_button">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>430</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Verifier</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>430</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>IdV</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ajouter">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>100</y>
+     <width>93</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Ajouter</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="editer">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>140</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Editer</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="supp">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>380</y>
+     <width>93</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid red;  
+           border-radius: 8px;  
+            
+          background-color: white;</string>
+   </property>
+   <property name="text">
+    <string>Supprimer</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_supp">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>375</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Supprimer</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
